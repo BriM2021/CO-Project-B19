@@ -184,7 +184,7 @@ def generate_code(instruction_syntax, type):
 		address = label(instruction_syntax[1])
 		if l == 2:
 			return 15
-		elif isinstance(addres, int):
+		elif isinstance(address, int):
 			return address
 		else:
 			binary_instruction += address
@@ -226,8 +226,11 @@ def menu():
 		bin_instr = generate_code(syntax[1:] if syntax[0][-1]==":" else syntax, typ)
 		# print(instr, typ, bin_instr)
 		if isinstance(bin_instr, str):
-			if syntax[0] == "hlt" and ind == len(assembly_instructions):
+			if syntax[0] != "hlt" and ind == len(assembly_instructions)-1:
 				err=18
+				break
+			if syntax[0] == "hlt" and ind != len(assembly_instructions)-1:
+				err=19
 				break
 			if bin_instr!="":
 				binary_instructions.append(bin_instr)
