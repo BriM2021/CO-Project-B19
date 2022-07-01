@@ -1,5 +1,6 @@
 import sys
 
+#store types of instructions
 type_A=["add", "sub", "mul", "xor", "or", "and"]
 type_B=["mov", "ls", "rs"]
 type_C=["mov", "div", "not" "cmp" ]
@@ -10,6 +11,8 @@ type_F=["hlt"]
 #store label memory address
 label_address={}
 label_vis={}
+
+#no of unused bits to be added
 unused_bit = {"A": 2, "B": 0, "C": 5, "D": 0, "E": 3, "F": 11}
 err_codes = {"0": "Overflow. Illegal immediate value", "1": "Error. Typo in opcode", }
 opcode = {"movB": "10010", "movC": "10011", "hlt": "01010", "mul": "10110", "st": "10101", "add" : "10000", "sub": "10001", "ld":"10100", "div": "10111", "rs": "11000", "ls": "11001", "xor": "11010", "or": "11011", "and": "11100", "not": "11101", "cmp": "11110", "jmp":"11111", "jlt": "01100", "jgt":"01101", "je": "01111"}
@@ -30,7 +33,7 @@ def read_file():
 			l.append(line)
 	return l
 
-
+#determine type
 def op_type(k, i):
 	# if(len(k)==0):
 	# 	return 0
@@ -64,7 +67,7 @@ def op_type(k, i):
 	else:
 		return 0
 
-
+#convert decimal number to binary
 def dec_to_binary(num, num_digits=8):
     ans=""
     l=[]
@@ -83,6 +86,8 @@ def dec_to_binary(num, num_digits=8):
     # print(ans)
     return ans
 
+
+#returns opcode
 def _opcode(op, t):
 	if op=="mov":
 		if t=="B":
@@ -91,9 +96,12 @@ def _opcode(op, t):
 			op=op+"C"
 	return opcode[op]
 
+#returns number of unused bits
 def _unused_bit(t):
 	return "0"*unused_bit[t]
 
+
+#check whether register is valid
 def is_reg(reg, op=None):
 	regstr = ""
 	for r in reg:
@@ -108,6 +116,7 @@ def is_reg(reg, op=None):
 			return 4
 	return regstr
 
+#check validity of immediate value
 def immediate_value(value):
 	if value[0] != "$":
 		# print("value:", value[0])
@@ -129,6 +138,7 @@ def label(address):
 	elif address in label_address:
 		return label_address[address]
 	return 8
+
 
 def generate_code(instruction_syntax, type):
 	global num_instructions
@@ -172,7 +182,7 @@ def generate_code(instruction_syntax, type):
 		reg = is_reg(instruction_syntax[1:2], type)
 		mem = memory_address(instruction_syntax[2])
 		# print("what ", reg, mem)
-		if l == 3:
+		if l != 3:
 			return 14
 		elif isinstance(reg, int):
 			return reg
@@ -182,7 +192,7 @@ def generate_code(instruction_syntax, type):
 			binary_instruction += reg + mem
 	elif type == "E":
 		address = label(instruction_syntax[1])
-		if l == 2:
+		if l != 2:
 			return 15
 		elif isinstance(address, int):
 			return address
@@ -213,7 +223,7 @@ def menu():
 		else:
 			err=typ
 
-	if err:
+	if err is not None:
 		print("Error1:", err)
 		return
 
