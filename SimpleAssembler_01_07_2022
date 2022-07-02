@@ -10,11 +10,27 @@ type_F=["hlt"]
 
 #store label memory address
 label_address={}
-label_vis={}
+# label_vis={}
 
 #no of unused bits to be added
 unused_bit = {"A": 2, "B": 0, "C": 5, "D": 0, "E": 3, "F": 11}
-err_codes = {"0": "Overflow. Illegal immediate value", "1": "Error. Typo in opcode", }
+err_codes = {
+	0: "Typo in instruction name",
+	1: "Typo in register name",
+	2: "Use of undefined variable",
+	3: "Use of undefined label",
+	4: "Illegal use of FLAGS register",
+	5: "Illegal immediate values (more than eight bits)",
+	6: "Misuse of labels as variables or vice-versa", 
+	7: "Variables not declared at the beginning",
+	8: "Missing hlt instruction",
+	9: "hlt not being used as the last instruction",
+	10: "Illegal use of labels => no instruction for label or multiple labels in same instruction",
+	11: "Syntax error in immediate value",
+	12: "Syntax error",
+	13: "Redefinition of variable",
+	14: "Using same label more than one time"
+}
 opcode = {"movB": "10010", "movC": "10011", "hlt": "01010", "mul": "10110", "st": "10101", "add" : "10000", "sub": "10001", "ld":"10100", "div": "10111", "rs": "11000", "ls": "11001", "xor": "11010", "or": "11011", "and": "11100", "not": "11101", "cmp": "11110", "jmp":"11111", "jlt": "01100", "jgt":"01101", "je": "01111"}
 var_address = {}
 num_instructions = 0
@@ -29,7 +45,7 @@ def read_file():
 	l=[]
 	for line in sys.stdin:
 		# print(line+"\n")
-		if(l!="\n"):
+		if(line!="\n"):
 			l.append(line)
 	return l
 
@@ -58,14 +74,13 @@ def op_type(k, i):
 		return "F"
 	elif(k[0][-1]==":"):
 		if len(k)==1 or k[1][-1] == ":":
-			return 19
-		label_address[k[0][:-1]]=dec_to_binary(int(i))
-		label_vis[k[0][:-1]]=False
+			return 10#
+		# label_vis[k[0][:-1]]=False
 		return op_type(k[1:], i)
 	elif(k[0]=="var"):
 		return "V"
 	else:
-		return 0
+		return 0#
 
 #convert decimal number to binary
 def dec_to_binary(num, num_digits=8):
@@ -111,33 +126,33 @@ def is_reg(reg, op=None):
 			if op == "movC" and reg[1] == "FLAGS":
 				regstr += dec_to_binary(7, 3)
 			else:
-				return 9
+				return 4#
 		else:
-			return 4
+			return 1#
 	return regstr
 
 #check validity of immediate value
 def immediate_value(value):
 	if value[0] != "$":
 		# print("value:", value[0])
-		return 5
+		return 11#
 	elif not value[1:].isnumeric():
-		return 12
+		return 11#
 	elif int(value[1:]) >= 2**8 or int(value[1:]) < 0:
-		return 6
+		return 5#
 	return dec_to_binary(int(value[1:]), 8)
 
 def memory_address(variable):
 	if variable in var_address:
 		return dec_to_binary(var_address[variable])
-	return 7
+	return 2#
 
 def label(address):
-	if address.isnumeric():
-		return address
-	elif address in label_address:
+	# if address.isnumeric():
+	# 	return address
+	if address in label_address:
 		return label_address[address]
-	return 8
+	return 3#
 
 
 def generate_code(instruction_syntax, type):
@@ -150,8 +165,14 @@ def generate_code(instruction_syntax, type):
 	# 	label_vis[instruction_syntax[0][-1]] = True
 	if type == "V":
 		if len(instruction_syntax) != 2:
-			return 16
-		var_address[instruction_syntax[1]] = num_instructions
+			return 12#
+		if instruction_syntax[1] not in var_address:
+			if instruction_syntax[1] not in label_address:
+				var_address[instruction_syntax[1]] = num_instructions
+			else:
+				return 6#
+		else:
+			return 13#
 		num_instructions += 1
 		return ""
 	binary_instruction += _opcode(instruction_syntax[0], type)
@@ -160,9 +181,9 @@ def generate_code(instruction_syntax, type):
 	if type == "A" or type == "C":
 		reg = is_reg(instruction_syntax[1:], instruction_syntax[0]+type)
 		if type == "A" and l != 4:
-			return 2
+			return 12#
 		elif type == "C" and l!=3:
-			return 3
+			return 12#
 		elif isinstance(reg, int):
 			return reg
 		else:
@@ -171,7 +192,7 @@ def generate_code(instruction_syntax, type):
 		reg = is_reg(instruction_syntax[1:2], type)
 		im_val = immediate_value(instruction_syntax[2])
 		if l != 3:
-			return 13
+			return 12#
 		elif isinstance(reg, int):
 			return reg
 		elif isinstance(im_val, int):
@@ -183,7 +204,7 @@ def generate_code(instruction_syntax, type):
 		mem = memory_address(instruction_syntax[2])
 		# print("what ", reg, mem)
 		if l != 3:
-			return 14
+			return 12#
 		elif isinstance(reg, int):
 			return reg
 		elif isinstance(mem, int):
@@ -193,14 +214,14 @@ def generate_code(instruction_syntax, type):
 	elif type == "E":
 		address = label(instruction_syntax[1])
 		if l != 2:
-			return 15
+			return 12#
 		elif isinstance(address, int):
 			return address
 		else:
 			binary_instruction += address
 	elif type == "F":
 		if l != 1:
-			return 17
+			return 12#
 	elif type != "F":
 		return type
 	return binary_instruction
@@ -219,12 +240,20 @@ def menu():
 		if isinstance(typ, str):
 			type_list.append(typ)
 			if typ != "V":
+				if blocks[0][-1] == ":":
+					if blocks[0][:-1] not in label_address:
+						label_address[blocks[0][:-1]]=dec_to_binary(int(num_instructions))
+					else:
+						err = 14#
 				num_instructions += 1
+			else:
+				if num_instructions > 0:
+					err = 7#
 		else:
 			err=typ
 
 	if err is not None:
-		print("Error1:", err)
+		print("Error:", err)
 		return
 
 	binary_instructions = list()
@@ -237,10 +266,10 @@ def menu():
 		# print(instr, typ, bin_instr)
 		if isinstance(bin_instr, str):
 			if syntax[0] != "hlt" and ind == len(assembly_instructions)-1:
-				err=18
+				err=8#
 				break
 			if syntax[0] == "hlt" and ind != len(assembly_instructions)-1:
-				err=19
+				err=9#
 				break
 			if bin_instr!="":
 				binary_instructions.append(bin_instr)
