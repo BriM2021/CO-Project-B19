@@ -34,6 +34,7 @@ err_codes = {
 opcode = {"movB": "10010", "movC": "10011", "hlt": "01010", "mul": "10110", "st": "10101", "add" : "10000", "sub": "10001", "ld":"10100", "div": "10111", "rs": "11000", "ls": "11001", "xor": "11010", "or": "11011", "and": "11100", "not": "11101", "cmp": "11110", "jmp":"11111", "jlt": "01100", "jgt":"01101", "je": "01111"}
 var_address = {}
 num_instructions = 0
+n = 0
 
 def read_file():
 	# x=input()
@@ -156,24 +157,25 @@ def label(address):
 
 
 def generate_code(instruction_syntax, type):
-	global num_instructions
+	global num_instructions, n
 	binary_instruction = ""
 	if instruction_syntax[0][-1] == ":":
+		if type == "V":
+			return (12, n)
+		if instruction_syntax[0][:-1] in var_address:
+			return (6, n)
 		instruction_syntax=instruction_syntax[1:]
 	# 	if instruction_syntax[0][-1] not in label_address:
 	# 		return 10
 	# 	label_vis[instruction_syntax[0][-1]] = True
 	if type == "V":
 		if len(instruction_syntax) != 2:
-			return 12#
+			return (12, n)
 		if instruction_syntax[1] not in var_address:
-			if instruction_syntax[1] not in label_address:
-				var_address[instruction_syntax[1]] = num_instructions
-			else:
-				return 6#
+			var_address[instruction_syntax[1]] = num_instructions + n
 		else:
-			return 13#
-		num_instructions += 1
+			return (13, n)
+		n += 1
 		return ""
 	binary_instruction += _opcode(instruction_syntax[0], type)
 	binary_instruction += _unused_bit(type)
@@ -181,22 +183,22 @@ def generate_code(instruction_syntax, type):
 	if type == "A" or type == "C":
 		reg = is_reg(instruction_syntax[1:], instruction_syntax[0]+type)
 		if type == "A" and l != 4:
-			return 12#
+			return (12, n)
 		elif type == "C" and l!=3:
-			return 12#
+			return (12, n)
 		elif isinstance(reg, int):
-			return reg
+			return (reg, n)
 		else:
 			binary_instruction += reg
 	elif type == "B":
 		reg = is_reg(instruction_syntax[1:2], type)
 		im_val = immediate_value(instruction_syntax[2])
 		if l != 3:
-			return 12#
+			return (12, n)
 		elif isinstance(reg, int):
-			return reg
+			return (reg, n)
 		elif isinstance(im_val, int):
-			return im_val
+			return (im_val, n)
 		else:
 			binary_instruction += reg + im_val
 	elif type == "D":
@@ -204,26 +206,27 @@ def generate_code(instruction_syntax, type):
 		mem = memory_address(instruction_syntax[2])
 		# print("what ", reg, mem)
 		if l != 3:
-			return 12#
+			return (12, n)
 		elif isinstance(reg, int):
-			return reg
+			return (reg, n)
 		elif isinstance(mem, int):
-			return mem
+			return (mem, n)
 		else:
 			binary_instruction += reg + mem
 	elif type == "E":
 		address = label(instruction_syntax[1])
 		if l != 2:
-			return 12#
+			return (12, n)
 		elif isinstance(address, int):
-			return address
+			return (address, n)
 		else:
 			binary_instruction += address
 	elif type == "F":
 		if l != 1:
-			return 12#
-	elif type != "F":
-		return type
+			return (12, n)
+	elif isinstance(type, int):
+		return (type, n)
+	n += 1
 	return binary_instruction
 
 
@@ -244,48 +247,44 @@ def menu():
 					if blocks[0][:-1] not in label_address:
 						label_address[blocks[0][:-1]]=dec_to_binary(int(num_instructions))
 					else:
-						err = 14#
+						err = (14, i)
+						break
 				num_instructions += 1
 			else:
 				if num_instructions > 0:
-					err = 7#
+					err = (7, i)
+					break
 		else:
-			err=typ
+			err=(typ, i)
+			break
 
 	if err is not None:
-		print("Error:", err)
+		err_n, err_ln = err
+		print("Error: ", err_codes[err_n], " on line number:", err_ln+1)
 		return
 
 	binary_instructions = list()
 	for ind, (instr, typ) in enumerate(zip(assembly_instructions, type_list)):
 		syntax = instr.split()
-		if isinstance(typ, int):
-			err = typ
-			break
-		bin_instr = generate_code(syntax[1:] if syntax[0][-1]==":" else syntax, typ)
-		# print(instr, typ, bin_instr)
+		bin_instr = generate_code(syntax, typ)
 		if isinstance(bin_instr, str):
 			if syntax[0] != "hlt" and ind == len(assembly_instructions)-1:
-				err=8#
+				err = (8, n)
 				break
-			if syntax[0] == "hlt" and ind != len(assembly_instructions)-1:
-				err=9#
+			elif syntax[0] == "hlt" and ind != len(assembly_instructions)-1:
+				err = (9, n)
 				break
-			if bin_instr!="":
+			elif bin_instr != "":
 				binary_instructions.append(bin_instr)
 		else:
 			err=bin_instr
 			break
-	# for key, value in label_vis.items():
-	# 	if value == False:
-	# 		err = 11
-	# 		break
+
 	if err is None:
 		for b in binary_instructions:
 			print(b)
 	else:
-		print("Error:", err)
-
-
+		err_n, err_ln = err
+		print("Error:", err_codes[err_n],"on line number:", err_ln+1)
 
 menu()
