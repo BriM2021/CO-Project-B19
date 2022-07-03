@@ -3,7 +3,7 @@ import sys
 #store types of instructions
 type_A=["add", "sub", "mul", "xor", "or", "and"]
 type_B=["mov", "ls", "rs"]
-type_C=["mov", "div", "not" "cmp" ]
+type_C=["mov", "div", "not" , "cmp" ]
 type_D=["ld", "st"]
 type_E=["jmp","jlt", "jgt","je" ]
 type_F=["hlt"]
