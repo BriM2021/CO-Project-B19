@@ -76,6 +76,8 @@ def op_type(k, i):
 	elif(k[0][-1]==":"):
 		if len(k)==1 or k[1][-1] == ":":
 			return 10#
+		# elif(k[1]=="hlt"):#
+		# 	return 9#
 		# label_vis[k[0][:-1]]=False
 		return op_type(k[1:], i)
 	elif(k[0]=="var"):
@@ -121,7 +123,7 @@ def _unused_bit(t):
 def is_reg(reg, op=None):
 	regstr = ""
 	for r in reg:
-		if r[0] == "R":
+		if r[0] == "R" and r[1:].isnumeric() and int(r[1:])<=6 and int(r[1:])>=0:#
 			regstr += dec_to_binary(int(r[-1]), 3)
 		elif r == "FLAGS":
 			if op == "movC" and reg[1] == "FLAGS":
@@ -162,6 +164,8 @@ def generate_code(instruction_syntax, type):
 	if instruction_syntax[0][-1] == ":":
 		if type == "V":
 			return (12, n)
+		if type=="F":
+			return (9,n)
 		if instruction_syntax[0][:-1] in var_address:
 			return (6, n)
 		instruction_syntax=instruction_syntax[1:]
