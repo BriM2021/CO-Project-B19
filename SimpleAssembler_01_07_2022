@@ -262,9 +262,11 @@ def menu():
 			err=(typ, i)
 			break
 
+	f=open("output.txt", "w")
 	if err is not None:
 		err_n, err_ln = err
 		print("Error: ", err_codes[err_n], " on line number:", err_ln+1)
+		f.write("Error: " + str(err_codes[err_n]) + " on line number: " + str(err_ln+1))
 		return
 
 	binary_instructions = list()
@@ -286,9 +288,11 @@ def menu():
 
 	if err is None:
 		for b in binary_instructions:
+			f.write(b+ "\n")
 			print(b)
 	else:
 		err_n, err_ln = err
 		print("Error:", err_codes[err_n],"on line number:", err_ln+1)
+		f.write("Error: " + str(err_codes[err_n]) + " on line number: "+ str(err_ln+1))
 
 menu()
