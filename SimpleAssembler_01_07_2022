@@ -157,7 +157,7 @@ def label(address):
 		return label_address[address]
 	return 3#
 
-
+#function to generate code
 def generate_code(instruction_syntax, type):
 	global num_instructions, n
 	binary_instruction = ""
@@ -233,7 +233,7 @@ def generate_code(instruction_syntax, type):
 	n += 1
 	return binary_instruction
 
-
+#INPUT SEND TO OUTPUT TEXT FILE
 def menu():
 	global num_instructions
 	assembly_instructions=read_file()
