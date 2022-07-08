@@ -151,7 +151,7 @@ def A(action, instruct, register_2, register_3):
         if x < 0 :
             return [0,1]
         #test_overflow(x)
-        return [x,0]
+        return x
 
     if action == "mul" :
         x = register_values[register_2]*register_values[register_3]
@@ -159,6 +159,7 @@ def A(action, instruct, register_2, register_3):
             y = decimal_to_binary_16bit(x)
             binaryToDecimal(y)
             return [y,1]
+        #test_overflow(x)
         return x
 
     if action == "xor" :
@@ -174,6 +175,13 @@ def A(action, instruct, register_2, register_3):
         return x
 
 #def B,C,D,E,F
+
+def B(action, register, imm):
+    if action == "mov":
+        return imm
+    if action == "rs":
+        return register_values[register] - imm
+
 
 
 """"main()
