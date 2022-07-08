@@ -75,13 +75,35 @@ register_codes =  {
 'R6' : '110',
 'FLAGS' :'111' }
 
+op_register_codes = {
+ '000': 'R0' ,
+'001':'R1',
+'010':'R2' ,
+'011':'R3' ,
+'100':'R4' ,
+'101':'R5',
+'110':'R6' ,
+'111':'FLAGS' 
+
+}
+
+register_values = {
+'R0' : 0000000000000000,
+'R1' : 0000000000000000,
+'R2' : 0000000000000000,
+'R3' : 0000000000000000,
+'R4' : 0000000000000000,
+'R5' : 0000000000000000,
+'R6' : 0000000000000000
+}
+
 #input the intruction :
 #check the opcode, assign the type and process according to the type 
 def extract_instruction(instruction):
 #instruction is the text we get from readlines 
 #instruct bceomes a list with all the different codes for the paritcular line this 
 
-    instrcut =[]
+    instruct =[]
     types = opcode[instruction[0:4]][1]
     if types == "A":
     #assign the actual actution into instruct 
@@ -116,15 +138,7 @@ def extract_instruction(instruction):
     return [ types, action, instruct ]
 
 #Values of registers as we traverse the file
-register_values = {
-'R0' : 0,
-'R1' : 0,
-'R2' : 0,
-'R3' : 0,
-'R4' :0,
-'R5' : 0,
-'R6' : 0
-}
+
 
 def binaryToDecimal(n):
     return int(n,2)
@@ -136,31 +150,30 @@ def decimal_to_binary_16bit(n):
 #make different functions to execute different functions 
 #A
 
-def A(action, instruct, register_2, register_3):
+def A(action, register_2, register_3):
 # type_A=["add", "sub", "mul", "xor", "or", "and"]
     if action == "add" :
-        x = register_values[register_2] + register_values[register_3]
+        x = int(register_values[register_2]) + int(register_values[register_3])
         if x > pow(2,16)-1:
             y = decimal_to_binary_16bit(x)
-            binaryToDecimal(y)
             return [y,1]
+        x = decimal_to_binary_16bit(x)
         return [x,0]
 
     if action == "sub" :
-        x = register_values[register_2] - register_values[register_3]
+        x = int(register_values[register_2]) - int(register_values[register_3])
         if x < 0 :
-            return [0,1]
-        #test_overflow(x)
+            return [0000000000,1]
+        x = decimal_to_binary_16bit(x)
         return x
 
     if action == "mul" :
-        x = register_values[register_2]*register_values[register_3]
+        x = int(register_values[register_2]) * int(register_values[register_3])
         if x > pow(2,16)-1:
             y = decimal_to_binary_16bit(x)
-            binaryToDecimal(y)
             return [y,1]
-        #test_overflow(x)
-        return x
+        x = decimal_to_binary_16bit(x)
+        return [x,0]
 
     if action == "xor" :
         x = register_values[register_2]^register_values[register_3]
@@ -180,34 +193,26 @@ def B(action, register, imm):
     if action == "mov":
         return imm
     if action == "rs":
-        return register_values[register] - imm
+        return register_values[register] >> imm
+    if action == "rs":
+        return register_values[register] << imm
 
+
+#type_C=["mov", "div", "not" , "cmp" ]
 
 
 """"main()
-
-
 {
 we open the file (look at syntax for that later)
  
 program counter = 0
-
-
 total lines = []
 total_lines = files.readlines()
 #contains all the lines for the program 
 l = len(total_lines)
 we process the lines one by one 
-
 while ( first_halt = 0):
-
  instruction = total_lines(i)
  info = extract_instruction(instruction)
  #info[0] = types, info[1] = action, info[2] = instruct
-
-
-
-
-
 }"""
-
