@@ -148,14 +148,17 @@ def A(action, instruct, register_2, register_3):
 
     if action == "sub" :
         x = register_values[register_2] - register_values[register_3]
-	if x < 0 :
+        if x < 0 :
             return [0,1]
         #test_overflow(x)
         return [x,0]
 
     if action == "mul" :
         x = register_values[register_2]*register_values[register_3]
-        #test_overflow(x)
+        if x > pow(2,16)-1:
+            y = decimal_to_binary_16bit(x)
+            binaryToDecimal(y)
+            return [y,1]
         return x
 
     if action == "xor" :
