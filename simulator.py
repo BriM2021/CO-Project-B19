@@ -1,4 +1,3 @@
-from sre_parse import FLAGS
 import sys
 def read_file():
 	# x=input()
@@ -89,16 +88,15 @@ op_register_codes = {
 }
 
 register_values = {
-'R0' : 0000000000000000,
-'R1' : 0000000000000000,
-'R2' : 0000000000000000,
-'R3' : 0000000000000000,
-'R4' : 0000000000000000,
-'R5' : 0000000000000000,
-'R6' : 0000000000000000
+'000' : 0000000000000000, #R0
+'001' : 0000000000000000, #R1
+'010' : 0000000000000000, #R2
+'011' : 0000000000000000, #R3
+'100' : 0000000000000000, #R4
+'101' : 0000000000000000, #R5
+'110' : 0000000000000000, #R5
+'111' : ['0','0','0','0'] #flag
 }
-
-FLAG = ['0','0','0','0']
 
 MEMORY_ADDRESS = '00000000'
 
@@ -109,7 +107,8 @@ def extract_instruction(instruction):
 #instruct bceomes a list with all the different codes for the paritcular line this 
 
     instruct =[]
-    types = opcode[instruction[0:4]][1]
+    dict = (opcode[instruction[0:4]])
+    types = dict[1]
     if types == "A":
     #assign the actual actution into instruct 
         action = opcode[instruction[0:4]][0]
@@ -158,27 +157,27 @@ def decimal_to_binary_16bit(n):
 def A(action, register_2, register_3):
 # type_A=["add", "sub", "mul", "xor", "or", "and"]
     if action == "add" :
-        x = int(register_values[register_2]) + int(register_values[register_3])
+        x = binaryToDecimal(register_values[register_2]) + (binaryToDecimal(register_values[register_3]))
         if x > pow(2,16)-1:
             y = decimal_to_binary_16bit(x)
-            return [y,1]
+            return [y,'1']
         x = decimal_to_binary_16bit(x)
-        return [x,0]
+        return [x,'0']
 
     if action == "sub" :
         x = int(register_values[register_2]) - int(register_values[register_3])
         if x < 0 :
-            return [0000000000,1]
+            return [0000000000000000,'1']
         x = decimal_to_binary_16bit(x)
-        return x
+        return [x,'0']
 
     if action == "mul" :
         x = int(register_values[register_2]) * int(register_values[register_3])
         if x > pow(2,16)-1:
             y = decimal_to_binary_16bit(x)
-            return [y,1]
+            return [y,'1']
         x = decimal_to_binary_16bit(x)
-        return [x,0]
+        return [x,'0']
 
     if action == "xor" :
         x = register_values[register_2]^register_values[register_3]
@@ -196,11 +195,11 @@ def A(action, register_2, register_3):
 
 def B(action, register, imm):
     if action == "mov":
-        return imm
+        register_values[register] = imm
     if action == "rs":
-        return register_values[register] >> imm
+        register_values[register] >> imm
     if action == "rs":
-        return register_values[register] << imm
+        register_values[register] << imm
 
 
 
@@ -226,26 +225,130 @@ def C(action, register_1, register_2 ):
     
 #type_D=["ld", "st"]
 def D(action, register_1, memory_ad):
+    global MEMORY_ADDRESS
     if action =="ld":
         register_values[register_1] = memory_ad
     if action == "st":
         MEMORY_ADDRESS = register_values[register_1]
 
 #type_E=["jmp","jlt", "jgt","je" ]
-def E(action, FLAG, memory_ad):
+def E(action, memory_ad):
+    global MEMORY_ADDRESS
+    global FLAG
     if action == "jmp":
         MEMORY_ADDRESS = memory_ad
     if action =="jlt":
-        if FLAG[1] == '1':
+        if register_values['111'][1] == '1':  #flag == '1':
             MEMORY_ADDRESS = memory_ad
     if action == "jgt":
-        if FLAG[2] == '1':
+        if register_values['111'][2] == '1': #flag
             MEMORY_ADDRESS = memory_ad
     if action == "je":
-        if FLAG[3] == "1":
+        if register_values['111'][3] == '1': #flag
             MEMORY_ADDRESS = memory_ad
 
 def F():
-    h = 'halt'
+    global halt 
+    halt = 1
+
+
+
+##############################################
+name = input()
+f = open(name, "r")
+total_lines = []
+total_lines = f.readlines()
+halt = 0
+i = 0
+#reading the file - not done yet above is just a placeholder for the actual code   
+#return [ types, action, instruct ]
+
+
+
+
+while (halt != 0):
+    instruction = total_lines[i]
+    info = extract_instruction(instruction)
+
+    if info[0] == "A":
+        if info[1] == 'add':
+            check = A(info[1], info[2][1], info[2][2])
+            if check[1] == "0":
+                register_values[info[2][0]] = check[0]
+            else :
+                register_values['111'][0] = '1' #flag
+
+                register_values[info[2][0]] = check[0]
+
+
+        if info[1] == "sub":
+            check = A(info[1], info[2][1], info[2][2])
+            if check[1] == '1':
+                register_values[info[2][0]] = check[0]
+                register_values['111'][0] = '1' #flag
+            else :
+                register_values[info[2][0]] = check[0]
+
+
+        if info[1] == 'mul':
+            check = A(info[1], info[2][1], info[2][2])
+            if check[1] == "0":
+                register_values[info[2][0]] = check[0]
+            else :
+                register_values['111'][0] = '1' #flag
+                register_values[info[2][0]] = check[0]
+
+
+        if info[1] == 'xor':
+            register_values[info[2][0]] = A(info[1], info[2][1], info[2][2])
+
+        if info[1] == 'or':
+            register_values[info[2][0]] = A(info[1], info[2][1], info[2][2])
+
+        if info[1] == 'and':
+            register_values[info[2][0]] = A(info[1], info[2][1], info[2][2])
+    
+    if info[0] == 'B':
+        B(info[1], info[2][0], int(info[2][1]))
+
+    if info[0] = 'C':
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#we open the file (look at syntax for that later)
+
+
+#program counter = 0
+#total lines = []
+#total_lines = files.readlines()
+#contains all the lines for the program 
+#l = len(total_lines)
+#we process the lines one by one 
+#while ( first_halt = 0):
+# instruction = total_lines(i)
+#info = extract_instruction(instruction)
+#info[0] = types, info[1] = action, info[2] = instruct
 
 
