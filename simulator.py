@@ -1,3 +1,4 @@
+from sre_parse import FLAGS
 import sys
 def read_file():
 	# x=input()
@@ -96,6 +97,10 @@ register_values = {
 'R5' : 0000000000000000,
 'R6' : 0000000000000000
 }
+
+FLAG = ['0','0','0','0']
+
+MEMORY_ADDRESS = '00000000'
 
 #input the intruction :
 #check the opcode, assign the type and process according to the type 
@@ -198,21 +203,49 @@ def B(action, register, imm):
         return register_values[register] << imm
 
 
+
 #type_C=["mov", "div", "not" , "cmp" ]
+def C(action, register_1, register_2 ):
+    if action == "mov" :
+        register_values[register_1] = register_values[register_2]
+    if action == "div":
+        r_2 = binaryToDecimal(register_values[register_2])
+        r_1 = binaryToDecimal(register_values[register_1])
+        quo = r_1//r_2
+        register_values[register_1] = decimal_to_binary_16bit(quo)
+        register_values[register_2] = decimal_to_binary_16bit(r_1%r_2)
+    if action == "not":
+        register_values[register_1] = ~register_2
+    if action == "cmp":
+        r_2 = binaryToDecimal(register_values[register_2])
+        r_1 = binaryToDecimal(register_values[register_1])
+        if r_1 > r_2:
+            return 1
+        else :
+            return 0
+    
+#type_D=["ld", "st"]
+def D(action, register_1, memory_ad):
+    if action =="ld":
+        register_values[register_1] = memory_ad
+    if action == "st":
+        MEMORY_ADDRESS = register_values[register_1]
+
+#type_E=["jmp","jlt", "jgt","je" ]
+def E(action, FLAG, memory_ad):
+    if action == "jmp":
+        MEMORY_ADDRESS = memory_ad
+    if action =="jlt":
+        if FLAG[1] == '1':
+            MEMORY_ADDRESS = memory_ad
+    if action == "jgt":
+        if FLAG[2] == '1':
+            MEMORY_ADDRESS = memory_ad
+    if action == "je":
+        if FLAG[3] == "1":
+            MEMORY_ADDRESS = memory_ad
+
+def F():
+    h = 'halt'
 
 
-""""main()
-{
-we open the file (look at syntax for that later)
- 
-program counter = 0
-total lines = []
-total_lines = files.readlines()
-#contains all the lines for the program 
-l = len(total_lines)
-we process the lines one by one 
-while ( first_halt = 0):
- instruction = total_lines(i)
- info = extract_instruction(instruction)
- #info[0] = types, info[1] = action, info[2] = instruct
-}"""
