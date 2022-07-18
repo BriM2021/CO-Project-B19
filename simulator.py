@@ -132,7 +132,7 @@ def extract_instruction(instruction):
     elif types == "E":
     #assign the actual actution into instruct 
         action = opcode[instruction[0:4]][0]
-        instruct = instruct + [instruction[5:8]] + [instruction[8:16]]
+        instruct = instruct + [instruction[8:16]]
 
     elif types == "F":
     #assign the actual actution into instruct 
@@ -219,9 +219,9 @@ def C(action, register_1, register_2 ):
         r_2 = binaryToDecimal(register_values[register_2])
         r_1 = binaryToDecimal(register_values[register_1])
         if r_1 > r_2:
-            return 1
+            return '1'
         else :
-            return 0
+            return '0'
     
 #type_D=["ld", "st"]
 def D(action, register_1, memory_ad):
@@ -311,25 +311,31 @@ while (halt != 0):
     if info[0] == 'B':
         B(info[1], info[2][0], int(info[2][1]))
 
-    if info[0] = 'C':
+    if info[0] == 'C':
+        if info[2] == "cmp ":
+            check = C(info[1], info[2][0], info[2][1])
+            if check == '1':
+                register_values['111'][2] = '1'
+        else :
+            C(info[1], info[2][0], info[2][1])
 
 
-
-        
-
-
-
-
-
-
-
-
-
+    if info[0] == 'D':
+        D(info[1], info[2][0], info[2][1])
+    
+    if info[0] == 'E':
+        E(info[1], info[2][0])
+    
+    if info[0] =='F':
+        halt = 1
+        break
 
 
+    #print PC and RF for each instruction
 
+#print the PC and RF for after the halt instruction
 
-
+#memory dump 
 
 
 
@@ -350,5 +356,4 @@ while (halt != 0):
 # instruction = total_lines(i)
 #info = extract_instruction(instruction)
 #info[0] = types, info[1] = action, info[2] = instruct
-
-
+#h
