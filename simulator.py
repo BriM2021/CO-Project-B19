@@ -172,14 +172,14 @@ def A(action, register_2, register_3):
         return [x,'0']
 
     if action == "sub" :
-        x = int(register_values[register_2]) - int(register_values[register_3])
+        x = binaryToDecimal(register_values[register_2]) - binaryToDecimal(register_values[register_3])
         if x < 0 :
             return [0000000000000000,'1']
         x = decimal_to_binary_16bit(x)
         return [x,'0']
 
     if action == "mul" :
-        x = int(register_values[register_2]) * int(register_values[register_3])
+        x = binaryToDecimal(register_values[register_2]) * binaryToDecimal(register_values[register_3])
         if x > pow(2,16)-1:
             y = decimal_to_binary_16bit(x)
             return [y,'1']
