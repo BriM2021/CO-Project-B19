@@ -213,7 +213,15 @@ def B(action, register, imm):
 #type_C=["mov", "div", "not" , "cmp" ]
 def C(action, register_1, register_2 ):
     if action == "mov" :
-        register_values[register_1] = register_values[register_2]
+	if register_2 == '111':
+            x = '000000000000'
+            for i in range(4):
+                x += register_values[register_2][i]
+            x = int(x)
+            register_values[register_1] = register_values[register_2]
+    else:
+	register_values[register_1] = register_values[register_2]
+	
     if action == "div":
         r_2 = binaryToDecimal(register_values[register_2])
         r_1 = binaryToDecimal(register_values[register_1])
@@ -279,7 +287,8 @@ for i in range(256-len(total_lines)):
 count = []
 cycle = 0
 
-
+def PCdump():
+	
 
 
 while (halt != 0):
@@ -363,6 +372,9 @@ while (halt != 0):
         cycle += 1
         count += [[cycle,PC_MEMORY_ADDRESS]]
         break
-
+    PCdump()	
     PC_MEMORY_ADDRESS = bin(int(PC_MEMORY_ADDRESS, 2) + int('00000001', 2))
+    register_values['111'] = ['0','0','0','0']
+   
+
 
