@@ -387,7 +387,7 @@ while (halt != 0):
         break
     PCdump()	
     PC_MEMORY_ADDRESS = bin(int(PC_MEMORY_ADDRESS, 2) + int('00000001', 2))
-    register_values['111'] = ['0','0','0','0']
+    
    
 
 
