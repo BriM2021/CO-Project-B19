@@ -234,7 +234,7 @@ def C(action, register_1, register_2 ):
 def D(action, register_1, memory_ad):
     global PC_MEMORY_ADDRESS
     if action =="ld":
-        register_values[register_1] = binaryToDecimal(memory_ad)
+        register_values[register_1] = memory_ad
     if action == "st":
         PC_MEMORY_ADDRESS = register_values[register_1]
 
@@ -243,16 +243,16 @@ def E(action, memory_ad):
     global PC_MEMORY_ADDRESS
     global FLAG
     if action == "jmp":
-        PC_MEMORY_ADDRESS = binaryToDecimal(memory_ad)
+        PC_MEMORY_ADDRESS = memory_ad
     if action =="jlt":
         if register_values['111'][1] == '1':  #flag == '1':
-            PC_MEMORY_ADDRESS =binaryToDecimal(memory_ad)
+            PC_MEMORY_ADDRESS = memory_ad
     if action == "jgt":
         if register_values['111'][2] == '1': #flag
-            PC_MEMORY_ADDRESS = binaryToDecimal(memory_ad)
+            PC_MEMORY_ADDRESS = memory_ad
     if action == "je":
         if register_values['111'][3] == '1': #flag
-            PC_MEMORY_ADDRESS = binaryToDecimal(memory_ad)
+            PC_MEMORY_ADDRESS = memory_ad
 
 def F():
     global halt 
@@ -276,7 +276,8 @@ for i in range(len(total_lines)):
 for i in range(256-len(total_lines)):
     memory_dump += ['0000000000000000']
 
-
+count = []
+cycle = 0
 
 
 
@@ -345,6 +346,5 @@ while (halt != 0):
         halt = 1
         break
 
-
-    PC_MEMORY_ADDRESS += 1
+    PC_MEMORY_ADDRESS = bin(int(PC_MEMORY_ADDRESS, 2) + int('00000001', 2))
 
