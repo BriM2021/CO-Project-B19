@@ -301,7 +301,10 @@ while (halt != 0):
             if check[1] == "0":
                 register_values[info[2][0]] = check[0]
             else :
-                register_values['111'][0] = '1' #flag
+                register_values['111'][0] = '1'#flag
+		register_values['111'][1] = '0'#flag
+		register_values['111'][2] = '0'
+		register_values['111'][3] = '0'#flag
 
                 register_values[info[2][0]] = check[0]
   
@@ -311,7 +314,10 @@ while (halt != 0):
             check = A(info[1], info[2][1], info[2][2])
             if check[1] == '1':
                 register_values[info[2][0]] = check[0]
-                register_values['111'][0] = '1' #flag
+                register_values['111'][0] = '1'#flag
+		register_values['111'][1] = '0'#flag
+		register_values['111'][2] = '0'
+		register_values['111'][3] = '0'#flag
             else :
                 register_values[info[2][0]] = check[0]
 
@@ -322,7 +328,10 @@ while (halt != 0):
             if check[1] == "0":
                 register_values[info[2][0]] = check[0]
             else :
-                register_values['111'][0] = '1' #flag
+                register_values['111'][0] = '1'#flag
+		register_values['111'][1] = '0'#flag
+		register_values['111'][2] = '0'
+		register_values['111'][3] = '0'#flag
                 register_values[info[2][0]] = check[0]
 
 
@@ -349,7 +358,11 @@ while (halt != 0):
         if info[2] == "cmp ":
             check = C(info[1], info[2][0], info[2][1])
             if check == '1':
-                register_values['111'][2] = '1'
+		register_values['111'][0] = '0'#flag
+		register_values['111'][1] = '0'#flag
+		register_values['111'][2] = '1'
+		register_values['111'][3] = '0'#flag
+                
         else :
             C(info[1], info[2][0], info[2][1])
 
