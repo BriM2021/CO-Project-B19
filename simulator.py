@@ -288,6 +288,11 @@ count = []
 cycle = 0
 
 def PCdump():
+	print( PC_MEMORY_ADDRESS, end = ' ')
+	x = register_values.values()
+	for i in range(len(register_values)):
+		print(x[i], end = ' ')
+		
 	
 
 
