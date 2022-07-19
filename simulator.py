@@ -98,7 +98,10 @@ register_values = {
 '111' : ['0','0','0','0'] #flag
 }
 
-MEMORY_ADDRESS = '00000000'
+PC_MEMORY_ADDRESS = '00000000'
+
+
+
 
 #input the intruction :
 #check the opcode, assign the type and process according to the type 
@@ -147,8 +150,12 @@ def extract_instruction(instruction):
 def binaryToDecimal(n):
     return int(n,2)
 
-def decimal_to_binary_16bit(n):
-    return 2
+def decimal_to_binary_16bit(decimal):
+    binary = str(bin(decimal))[2:]
+    if len(binary) > 16:
+        return binary[-16:]
+    else:
+        return '0'*(16-len(binary)) + binary
 
 
 #make different functions to execute different functions 
@@ -225,27 +232,27 @@ def C(action, register_1, register_2 ):
     
 #type_D=["ld", "st"]
 def D(action, register_1, memory_ad):
-    global MEMORY_ADDRESS
+    global PC_MEMORY_ADDRESS
     if action =="ld":
-        register_values[register_1] = memory_ad
+        register_values[register_1] = binaryToDecimal(memory_ad)
     if action == "st":
-        MEMORY_ADDRESS = register_values[register_1]
+        PC_MEMORY_ADDRESS = register_values[register_1]
 
 #type_E=["jmp","jlt", "jgt","je" ]
 def E(action, memory_ad):
-    global MEMORY_ADDRESS
+    global PC_MEMORY_ADDRESS
     global FLAG
     if action == "jmp":
-        MEMORY_ADDRESS = memory_ad
+        PC_MEMORY_ADDRESS = binaryToDecimal(memory_ad)
     if action =="jlt":
         if register_values['111'][1] == '1':  #flag == '1':
-            MEMORY_ADDRESS = memory_ad
+            PC_MEMORY_ADDRESS =binaryToDecimal(memory_ad)
     if action == "jgt":
         if register_values['111'][2] == '1': #flag
-            MEMORY_ADDRESS = memory_ad
+            PC_MEMORY_ADDRESS = binaryToDecimal(memory_ad)
     if action == "je":
         if register_values['111'][3] == '1': #flag
-            MEMORY_ADDRESS = memory_ad
+            PC_MEMORY_ADDRESS = binaryToDecimal(memory_ad)
 
 def F():
     global halt 
@@ -259,15 +266,23 @@ f = open(name, "r")
 total_lines = []
 total_lines = f.readlines()
 halt = 0
-i = 0
+
 #reading the file - not done yet above is just a placeholder for the actual code   
 #return [ types, action, instruct ]
+memory_dump = []
+for i in range(len(total_lines)):
+    memory_dump[i] = total_lines[i]
+
+for i in range(256-len(total_lines)):
+    memory_dump += ['0000000000000000']
+
+
 
 
 
 
 while (halt != 0):
-    instruction = total_lines[i]
+    instruction = total_lines[PC_MEMORY_ADDRESS]
     info = extract_instruction(instruction)
 
     if info[0] == "A":
@@ -331,29 +346,5 @@ while (halt != 0):
         break
 
 
-    #print PC and RF for each instruction
+    PC_MEMORY_ADDRESS += 1
 
-#print the PC and RF for after the halt instruction
-
-#memory dump 
-
-
-
-
-
-
-
-#we open the file (look at syntax for that later)
-
-
-#program counter = 0
-#total lines = []
-#total_lines = files.readlines()
-#contains all the lines for the program 
-#l = len(total_lines)
-#we process the lines one by one 
-#while ( first_halt = 0):
-# instruction = total_lines(i)
-#info = extract_instruction(instruction)
-#info[0] = types, info[1] = action, info[2] = instruct
-#h
