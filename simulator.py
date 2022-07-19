@@ -295,6 +295,7 @@ while (halt != 0):
                 register_values['111'][0] = '1' #flag
 
                 register_values[info[2][0]] = check[0]
+  
 
 
         if info[1] == "sub":
@@ -306,6 +307,7 @@ while (halt != 0):
                 register_values[info[2][0]] = check[0]
 
 
+
         if info[1] == 'mul':
             check = A(info[1], info[2][1], info[2][2])
             if check[1] == "0":
@@ -313,6 +315,7 @@ while (halt != 0):
             else :
                 register_values['111'][0] = '1' #flag
                 register_values[info[2][0]] = check[0]
+
 
 
         if info[1] == 'xor':
@@ -323,9 +326,15 @@ while (halt != 0):
 
         if info[1] == 'and':
             register_values[info[2][0]] = A(info[1], info[2][1], info[2][2])
+
+        cycle += 1
+        count += [[cycle,PC_MEMORY_ADDRESS]]
     
     if info[0] == 'B':
         B(info[1], info[2][0], int(info[2][1]))
+
+        cycle += 1
+        count += [[cycle,PC_MEMORY_ADDRESS]]
 
     if info[0] == 'C':
         if info[2] == "cmp ":
@@ -335,15 +344,24 @@ while (halt != 0):
         else :
             C(info[1], info[2][0], info[2][1])
 
+        cycle += 1
+        count += [[cycle,PC_MEMORY_ADDRESS]]
+
 
     if info[0] == 'D':
         D(info[1], info[2][0], info[2][1])
+        cycle += 1
+        count += [[cycle,PC_MEMORY_ADDRESS]]
     
     if info[0] == 'E':
         E(info[1], info[2][0])
+        cycle += 1
+        count += [[cycle,PC_MEMORY_ADDRESS]]
     
     if info[0] =='F':
         halt = 1
+        cycle += 1
+        count += [[cycle,PC_MEMORY_ADDRESS]]
         break
 
     PC_MEMORY_ADDRESS = bin(int(PC_MEMORY_ADDRESS, 2) + int('00000001', 2))
