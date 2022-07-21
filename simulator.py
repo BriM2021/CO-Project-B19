@@ -110,36 +110,36 @@ def extract_instruction(instruction):
 #instruct bceomes a list with all the different codes for the paritcular line this 
 
     instruct =[]
-    dict = (opcode[instruction[0:4]])
+    dict = (opcode[instruction[0:5]])
     types = dict[1]
     if types == "A":
     #assign the actual actution into instruct 
-        action = opcode[instruction[0:4]][0]
+        action = opcode[instruction[0:5]][0]
         instruct = instruct + [instruction[7:10]] + [instruction[10:13]] + [instruction[13:16]]
 
     elif types == "B":
     #assign the actual actution into instruct 
-        action = opcode[instruction[0:4]][0]
+        action = opcode[instruction[0:5]][0]
         instruct = instruct + [instruction[5:8]] + [instruction[8:16]] 
 
     elif types == "C":
     #assign the actual actution into instruct 
-        action = opcode[instruction[0:4]][0]
+        action = opcode[instruction[0:5]][0]
         instruct = instruct + [instruction[10:13]] + [instruction[13:16]] 
 
     elif types == "D":
     #assign the actual actution into instruct 
-        action = opcode[instruction[0:4]][0]
+        action = opcode[instruction[0:5]][0]
         instruct = instruct + [instruction[5:8]] + [instruction[8:16]] 
 
     elif types == "E":
     #assign the actual actution into instruct 
-        action = opcode[instruction[0:4]][0]
+        action = opcode[instruction[0:5]][0]
         instruct = instruct + [instruction[8:16]]
 
     elif types == "F":
     #assign the actual actution into instruct 
-        action = opcode[instruction[0:4]][0]
+        action = opcode[instruction[0:5]][0]
         instruct = instruct + [instruction[5:16]] 
 
     return [ types, action, instruct ]
@@ -148,7 +148,15 @@ def extract_instruction(instruction):
 
 
 def binaryToDecimal(n):
-    return int(n,2)
+    x=int(n)
+    ans=0
+    i=0
+    while(x>0):
+        t=x%10
+        ans+=t*pow(2, i)
+        x=x//10
+        i+=1
+    return ans
 
 def decimal_to_binary_16bit(decimal):
     binary = str(bin(decimal))[2:]
@@ -275,6 +283,8 @@ def F():
 #name = input()
 # f = open(name, "r")
 total_lines = read_file()
+# print("DISDIOSH")
+# print(total_lines)
 # total_lines = f.readlines()
 halt = 0
 
@@ -282,7 +292,7 @@ halt = 0
 #return [ types, action, instruct ]
 memory_dump = []
 for i in range(len(total_lines)):
-    memory_dump[i] = total_lines[i]
+    memory_dump.append(total_lines[i])
 
 for i in range(256-len(total_lines)):
     memory_dump += ['0000000000000000']
@@ -293,14 +303,16 @@ cycle = 0
 def PCdump():
 	print( PC_MEMORY_ADDRESS, end = ' ')
 	x = register_values.values()
-	for i in range(len(register_values)):
-		print(x[i], end = ' ')
+	for i in x:
+		print(i, end = ' ')
 		
 	
 
 
-while (halt != 0):
-    instruction = total_lines[PC_MEMORY_ADDRESS]
+while (halt == 0):
+    # print("jksdfb\n")
+    # print(PC_MEMORY_ADDRESS, "num\n" )
+    instruction = total_lines[binaryToDecimal(PC_MEMORY_ADDRESS)]
     info = extract_instruction(instruction)
 
     if info[0] == "A":
