@@ -276,6 +276,11 @@ def E(action, memory_ad):
 def F():
     global halt 
     halt = 1
+	
+	
+def PCupdate(x):
+    new = bin(int(x, 2) + int('00000001', 2))
+    return new[2:]
 
 
 
@@ -406,6 +411,6 @@ while (halt == 0):
         count += [[cycle,PC_MEMORY_ADDRESS]]
         break
     PCdump()	
-    PC_MEMORY_ADDRESS = bin(int(PC_MEMORY_ADDRESS, 2) + int('00000001', 2))
+    PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
     
    
