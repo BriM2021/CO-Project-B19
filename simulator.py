@@ -34,7 +34,7 @@ opcode = {
 '01101': ['jgt', 'E'],
 '01101': ['jgt', 'E'],
 '01111': ['je', 'E'],
-'01010': ['hlt',-1]
+'01010': ['hlt','F']
 }
 
 type_A=["add", "sub", "mul", "xor", "or", "and"]
@@ -112,6 +112,7 @@ def extract_instruction(instruction):
     instruct =[]
     dict = (opcode[instruction[0:5]])
     types = dict[1]
+    action=""
     if types == "A":
     #assign the actual actution into instruct 
         action = opcode[instruction[0:5]][0]
@@ -141,8 +142,11 @@ def extract_instruction(instruction):
     #assign the actual actution into instruct 
         action = opcode[instruction[0:5]][0]
         instruct = instruct + [instruction[5:16]] 
-
-    return [ types, action, instruct ]
+    l=[]
+    l.append(types)
+    l.append(action)
+    l.append(instruct)
+    return l
 
 #Values of registers as we traverse the file
 
@@ -306,10 +310,11 @@ count = []
 cycle = 0
 
 def PCdump():
-	print( PC_MEMORY_ADDRESS, end = ' ')
-	x = register_values.values()
-	for i in x:
-		print(i, end = ' ')
+    print( PC_MEMORY_ADDRESS, end = ' ')
+    x = register_values.values()
+    for i in x:
+        print(i, end = ' ')
+    print("")
 		
 	
 
@@ -317,6 +322,8 @@ def PCdump():
 while (halt == 0):
     # print("jksdfb\n")
     # print(PC_MEMORY_ADDRESS, "num\n" )
+    # print(PC_MEMORY_ADDRESS)
+    # print(binaryToDecimal(PC_MEMORY_ADDRESS))
     instruction = total_lines[binaryToDecimal(PC_MEMORY_ADDRESS)]
     info = extract_instruction(instruction)
 
@@ -409,8 +416,9 @@ while (halt == 0):
         halt = 1
         cycle += 1
         count += [[cycle,PC_MEMORY_ADDRESS]]
+        PCdump()	
+        PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
+        # print(PC_MEMORY_ADDRESS)
         break
     PCdump()	
     PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
-    
-   
