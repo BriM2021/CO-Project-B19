@@ -269,10 +269,10 @@ def F():
 
 
 ##############################################
-name = input()
-f = open(name, "r")
-total_lines = []
-total_lines = f.readlines()
+#name = input()
+# f = open(name, "r")
+total_lines = read_file()
+# total_lines = f.readlines()
 halt = 0
 
 #reading the file - not done yet above is just a placeholder for the actual code   
