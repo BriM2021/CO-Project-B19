@@ -213,14 +213,17 @@ def B(action, register, imm):
 #type_C=["mov", "div", "not" , "cmp" ]
 def C(action, register_1, register_2 ):
     if action == "mov" :
-	if register_2 == '111':
+        if register_2 == '111':
             x = '000000000000'
+
             for i in range(4):
                 x += register_values[register_2][i]
+
             x = int(x)
+            register_values[register_1] = x
+            
+        else :
             register_values[register_1] = register_values[register_2]
-    else:
-	register_values[register_1] = register_values[register_2]
 	
     if action == "div":
         r_2 = binaryToDecimal(register_values[register_2])
@@ -307,9 +310,9 @@ while (halt != 0):
                 register_values[info[2][0]] = check[0]
             else :
                 register_values['111'][0] = '1'#flag
-		register_values['111'][1] = '0'#flag
-		register_values['111'][2] = '0'
-		register_values['111'][3] = '0'#flag
+                register_values['111'][1] = '0'#flag
+                register_values['111'][2] = '0'
+                register_values['111'][3] = '0'#flag
 
                 register_values[info[2][0]] = check[0]
   
@@ -320,9 +323,9 @@ while (halt != 0):
             if check[1] == '1':
                 register_values[info[2][0]] = check[0]
                 register_values['111'][0] = '1'#flag
-		register_values['111'][1] = '0'#flag
-		register_values['111'][2] = '0'
-		register_values['111'][3] = '0'#flag
+                register_values['111'][1] = '0'#flag
+                register_values['111'][2] = '0'
+                register_values['111'][3] = '0'#flag
             else :
                 register_values[info[2][0]] = check[0]
 
@@ -334,9 +337,9 @@ while (halt != 0):
                 register_values[info[2][0]] = check[0]
             else :
                 register_values['111'][0] = '1'#flag
-		register_values['111'][1] = '0'#flag
-		register_values['111'][2] = '0'
-		register_values['111'][3] = '0'#flag
+                register_values['111'][1] = '0'#flag
+                register_values['111'][2] = '0'
+                register_values['111'][3] = '0'#flag
                 register_values[info[2][0]] = check[0]
 
 
@@ -363,10 +366,10 @@ while (halt != 0):
         if info[2] == "cmp ":
             check = C(info[1], info[2][0], info[2][1])
             if check == '1':
-		register_values['111'][0] = '0'#flag
-		register_values['111'][1] = '0'#flag
-		register_values['111'][2] = '1'
-		register_values['111'][3] = '0'#flag
+                register_values['111'][0] = '0'#flag
+                register_values['111'][1] = '0'#flag
+                register_values['111'][2] = '1'
+                register_values['111'][3] = '0'#flag
                 
         else :
             C(info[1], info[2][0], info[2][1])
@@ -394,5 +397,3 @@ while (halt != 0):
     PC_MEMORY_ADDRESS = bin(int(PC_MEMORY_ADDRESS, 2) + int('00000001', 2))
     
    
-
-
