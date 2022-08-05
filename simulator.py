@@ -221,9 +221,9 @@ def B(action, register, imm):
     if action == "mov":
         register_values[register] = int(eightto16(imm))
     if action == "rs":
-        register_values[register] = register_values[register] >> int(eightto16(imm))
+        register_values[register] = decimal_to_binary_16bit(register_values[register] >> int(eightto16(imm)))
     if action == "rs":
-        register_values[register] = register_values[register] << int(eightto16(imm))
+        register_values[register] = decimal_to_binary_16bit(register_values[register] << int(eightto16(imm)))
 
 
 
