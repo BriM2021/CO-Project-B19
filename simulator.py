@@ -235,7 +235,7 @@ def B(action, register, imm):
         if t >= 16 :
             convert = 0000000000000000
         else:
-            convert = str(register_values[register])
+            convert = "0"*(16-len(str(register_values[register]))) + str(register_values[register]) 
             convert = convert[t:]
             convert = convert + "0"*(16-len(convert))
         register_values[register] = int(convert)
