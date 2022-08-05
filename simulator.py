@@ -173,7 +173,14 @@ def eightto16(a):
 	return (16-len(a))*'0' + a
 	
 	
-
+def invert_func(x): #x is str # changed 
+    result=""
+    for i in x:
+        if i=="0":
+            result+="1"
+        else:
+            result+="0"
+    return result
 
 #make different functions to execute different functions 
 #A
@@ -264,7 +271,7 @@ def C(action, register_1, register_2 ):
         register_values[register_1] = decimal_to_binary_16bit(quo)
         register_values[register_2] = decimal_to_binary_16bit(r_1%r_2)
     if action == "not":
-        register_values[register_1] = ~register_2
+        register_values[register_2] = int(invert_func(str(register_values[register_1]))) # changed
     if action == "cmp":
         r_2 = binaryToDecimal(register_values[register_2])
         r_1 = binaryToDecimal(register_values[register_1])
@@ -390,13 +397,13 @@ while (halt == 0):
 
 
         if info[1] == 'xor':
-            register_values[info[2][0]] = A(info[1], info[2][1], info[2][2])
+            register_values[info[2][2]] = A(info[1], info[2][0], info[2][1]) #changed 
 
         if info[1] == 'or':
-            register_values[info[2][0]] = A(info[1], info[2][1], info[2][2])
+            register_values[info[2][2]] = A(info[1], info[2][0], info[2][1]) #changed 
 
         if info[1] == 'and':
-            register_values[info[2][0]] = A(info[1], info[2][1], info[2][2])
+            register_values[info[2][2]] = A(info[1], info[2][0], info[2][1]) #changed 
 
         cycle += 1
         count += [[cycle,PC_MEMORY_ADDRESS]]
