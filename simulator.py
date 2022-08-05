@@ -231,7 +231,15 @@ def B(action, register, imm):
         
         register_values[register] = int(convert)
     if action == "ls":
-        register_values[register] = decimal_to_binary_16bit(register_values[register] << binaryToDecimal(int(imm)))
+	t = binaryToDecimal(imm)
+        if t >= 16 :
+            convert = 0000000000000000
+        else:
+            convert = str(register_values[register])
+            convert = "0"*t + convert
+            convert = convert[:16]
+	
+	register_values[register] = int(convert)
 
 
 
