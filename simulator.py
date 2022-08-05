@@ -231,15 +231,14 @@ def B(action, register, imm):
         
         register_values[register] = int(convert)
     if action == "ls":
-	t = binaryToDecimal(imm)
+        t = binaryToDecimal(imm)
         if t >= 16 :
             convert = 0000000000000000
         else:
             convert = str(register_values[register])
             convert = "0"*t + convert
             convert = convert[:16]
-	
-	register_values[register] = int(convert)
+        register_values[register] = int(convert)
 
 
 
