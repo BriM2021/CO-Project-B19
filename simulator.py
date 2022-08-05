@@ -319,7 +319,7 @@ def PCdump():
     print( PC_MEMORY_ADDRESS, end = ' ')
     x = register_values.values()
     for i in x:
-        print(i, end = ' ')
+        print(str(i), end = ' ')
     print("")
 		
 	
