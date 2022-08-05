@@ -285,7 +285,7 @@ def F():
 def PCupdate(x):
     new = bin(int(x, 2) + int('00000001', 2))
     new_1=new[2:]
-    return "0"*(16-len(new_1)) + new_1
+    return "0"*(8-len(new_1)) + new_1
 
 
 
