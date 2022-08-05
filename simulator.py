@@ -273,7 +273,7 @@ def C(action, register_1, register_2 ):
             return '1' #greater than flag is set 
         if r_1 < r_2 :
             return '0' #lesser than flag is set
-        if r_1 = r_2:
+        if r_1 == r_2:
 	    return '2'
     
 #type_D=["ld", "st"]
