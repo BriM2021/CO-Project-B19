@@ -169,6 +169,11 @@ def decimal_to_binary_16bit(decimal):
     else:
         return int('0'*(16-len(binary)) + binary)
 
+def eightto16(a):
+	return (16-len(a))*'0' + a
+	
+	
+
 
 #make different functions to execute different functions 
 #A
@@ -214,11 +219,11 @@ def A(action, register_2, register_3):
 
 def B(action, register, imm):
     if action == "mov":
-        register_values[register] = imm
+        register_values[register] = int(eightto16(imm))
     if action == "rs":
-        register_values[register] >> imm
+        register_values[register] = register_values[register] >> int(eightto16(imm))
     if action == "rs":
-        register_values[register] << imm
+        register_values[register] = register_values[register] << int(eightto16(imm))
 
 
 
