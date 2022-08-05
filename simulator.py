@@ -293,12 +293,19 @@ def E(action, memory_ad):
     if action =="jlt":
         if register_values['111'][13] == '1':  #flag == '1':
             PC_MEMORY_ADDRESS = memory_ad
+	else :
+            PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
+		
     if action == "jgt":
         if register_values['111'][14] == '1': #flag
             PC_MEMORY_ADDRESS = memory_ad
+	else:
+            PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
     if action == "je":
         if register_values['111'][15] == '1': #flag
             PC_MEMORY_ADDRESS = memory_ad
+	else :
+            PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
 
 def F():
     global halt 
