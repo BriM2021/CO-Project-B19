@@ -387,7 +387,7 @@ while (halt == 0):
         count += [[cycle,PC_MEMORY_ADDRESS]]
     
     if info[0] == 'B':
-        B(info[1], info[2][0], int(info[2][1]))
+        B(info[1], info[2][0], (info[2][1]))
 
         cycle += 1
         count += [[cycle,PC_MEMORY_ADDRESS]]
