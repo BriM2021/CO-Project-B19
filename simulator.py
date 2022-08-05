@@ -100,6 +100,8 @@ register_values = {
 
 PC_MEMORY_ADDRESS = '00000000'
 
+load_store = {}
+
 
 
 
@@ -280,9 +282,10 @@ def C(action, register_1, register_2 ):
 def D(action, register_1, memory_ad):
     global PC_MEMORY_ADDRESS
     if action =="ld":
-        register_values[register_1] = memory_ad
+	register_values[register_1] = load_store[memory_ad]
+
     if action == "st":
-        PC_MEMORY_ADDRESS = register_values[register_1]
+        load_store[memory_ad] = register_values[register_1]
 
 #type_E=["jmp","jlt", "jgt","je" ]
 def E(action, memory_ad):
