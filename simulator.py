@@ -236,8 +236,8 @@ def B(action, register, imm):
             convert = 0000000000000000
         else:
             convert = str(register_values[register])
-            convert = "0"*t + convert
-            convert = convert[:16]
+            convert = convert[t:]
+            convert = convert + "0"*(16-len(convert))
         register_values[register] = int(convert)
 
 
