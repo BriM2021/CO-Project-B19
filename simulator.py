@@ -100,7 +100,7 @@ register_values = {
 
 PC_MEMORY_ADDRESS = '00000000'
 
-load_store = {}
+
 
 
 #input the intruction :
@@ -280,10 +280,9 @@ def C(action, register_1, register_2 ):
 def D(action, register_1, memory_ad):
     global PC_MEMORY_ADDRESS
     if action =="ld":
-	register_values[register_1] = load_store[memory_ad]
+        register_values[register_1] = memory_ad
     if action == "st":
-	load_store[memory_ad] = register_values[register_1]
-
+        PC_MEMORY_ADDRESS = register_values[register_1]
 
 #type_E=["jmp","jlt", "jgt","je" ]
 def E(action, memory_ad):
@@ -294,18 +293,18 @@ def E(action, memory_ad):
     if action =="jlt":
         if register_values['111'][13] == '1':  #flag == '1':
             PC_MEMORY_ADDRESS = memory_ad
-	else :
+        else :
             PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
 		
     if action == "jgt":
         if register_values['111'][14] == '1': #flag
             PC_MEMORY_ADDRESS = memory_ad
-	else:
+        else:
             PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
     if action == "je":
         if register_values['111'][15] == '1': #flag
             PC_MEMORY_ADDRESS = memory_ad
-	else :
+        else :
             PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
 
 def F():
