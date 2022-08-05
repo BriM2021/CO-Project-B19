@@ -274,7 +274,7 @@ def C(action, register_1, register_2 ):
         if r_1 < r_2 :
             return '0' #lesser than flag is set
         if r_1 == r_2:
-	    return '2'
+	        return '2'
     
 #type_D=["ld", "st"]
 def D(action, register_1, memory_ad):
@@ -351,14 +351,13 @@ while (halt == 0):
     # print(binaryToDecimal(PC_MEMORY_ADDRESS))
     instruction = total_lines[binaryToDecimal(PC_MEMORY_ADDRESS)]
     info = extract_instruction(instruction)
-
     if info[0] == "A":
         if info[1] == 'add':
             check = A(info[1], info[2][1], info[2][2])
             if check[1] == "0":
                 register_values[info[2][0]] = check[0]
             else :
-		register_values['111'] = '0000000000001000'
+                register_values['111'] = '0000000000001000'
 
                 register_values[info[2][0]] = check[0]
   
@@ -368,7 +367,7 @@ while (halt == 0):
             check = A(info[1], info[2][1], info[2][2])
             if check[1] == '1':
                 register_values[info[2][0]] = check[0]
-		register_values['111'] = '0000000000001000'
+                register_values['111'] = '0000000000001000'
 
             else :
                 register_values[info[2][0]] = check[0]
@@ -380,7 +379,7 @@ while (halt == 0):
             if check[1] == "0":
                 register_values[info[2][0]] = check[0]
             else :
-		register_values['111'] = '0000000000001000'
+                register_values['111'] = '0000000000001000'
          
                 register_values[info[2][0]] = check[0]
 
@@ -405,14 +404,14 @@ while (halt == 0):
         count += [[cycle,PC_MEMORY_ADDRESS]]
 
     if info[0] == 'C':
-        if info[2] == "cmp ":
+        if info[1] == 'cmp' :
             check = C(info[1], info[2][0], info[2][1])
             if check == '1':
-		register_values['111'] = '0000000000000010'
-	    elif check == '0':
-		register_values['111'] = '0000000000000100'
-	    if check == '2':
-		register_values['111'] = '0000000000000001'
+                register_values['111'] = '0000000000000010'
+            elif check == '0':
+                register_values['111'] = '0000000000000100'
+            elif check == '2':
+                register_values['111'] = '0000000000000001'
 		
  
                 
