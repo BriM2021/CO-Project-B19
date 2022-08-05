@@ -282,7 +282,7 @@ def C(action, register_1, register_2 ):
 def D(action, register_1, memory_ad):
     global PC_MEMORY_ADDRESS
     if action =="ld":
-	register_values[register_1] = load_store[memory_ad]
+        register_values[register_1] = load_store[memory_ad]
 
     if action == "st":
         load_store[memory_ad] = register_values[register_1]
