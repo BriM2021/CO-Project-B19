@@ -428,9 +428,11 @@ while (halt == 0):
         count += [[cycle,PC_MEMORY_ADDRESS]]
     
     if info[0] == 'E':
-        E(info[1], info[2][0])
-        cycle += 1
+	PCdump()
+	cycle += 1
         count += [[cycle,PC_MEMORY_ADDRESS]]
+        E(info[1], info[2][0])
+	continue
     
     if info[0] =='F':
         halt = 1
