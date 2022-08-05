@@ -95,7 +95,7 @@ register_values = {
 '100' : 0000000000000000, #R4
 '101' : 0000000000000000, #R5
 '110' : 0000000000000000, #R6
-'111' : ['0','0','0','0'] #flag
+'111' : '0000000000000000' #flag
 }
 
 PC_MEMORY_ADDRESS = '00000000'
@@ -253,13 +253,7 @@ def B(action, register, imm):
 def C(action, register_1, register_2 ):
     if action == "mov" :
         if register_2 == '111':
-            x = '000000000000'
-
-            for i in range(4):
-                x += register_values[register_2][i]
-
-            x = int(x)
-            register_values[register_1] = x
+            register_values[register_1] = int(register_values[register_2])
             
         else :
             register_values[register_1] = register_values[register_2]
@@ -276,9 +270,11 @@ def C(action, register_1, register_2 ):
         r_2 = binaryToDecimal(register_values[register_2])
         r_1 = binaryToDecimal(register_values[register_1])
         if r_1 > r_2:
-            return '1'
-        else :
-            return '0'
+            return '1' #greater than flag is set 
+        if r_1 < r_2 :
+            return '0' #lesser than flag is set
+        if r_1 = r_2:
+	    return '2'
     
 #type_D=["ld", "st"]
 def D(action, register_1, memory_ad):
@@ -295,13 +291,13 @@ def E(action, memory_ad):
     if action == "jmp":
         PC_MEMORY_ADDRESS = memory_ad
     if action =="jlt":
-        if register_values['111'][1] == '1':  #flag == '1':
+        if register_values['111'][14] == '1':  #flag == '1':
             PC_MEMORY_ADDRESS = memory_ad
     if action == "jgt":
-        if register_values['111'][2] == '1': #flag
+        if register_values['111'][15] == '1': #flag
             PC_MEMORY_ADDRESS = memory_ad
     if action == "je":
-        if register_values['111'][3] == '1': #flag
+        if register_values['111'][16] == '1': #flag
             PC_MEMORY_ADDRESS = memory_ad
 
 def F():
@@ -313,6 +309,7 @@ def PCupdate(x):
     new = bin(int(x, 2) + int('00000001', 2))
     new_1=new[2:]
     return "0"*(8-len(new_1)) + new_1
+
 
 
 
@@ -361,10 +358,7 @@ while (halt == 0):
             if check[1] == "0":
                 register_values[info[2][0]] = check[0]
             else :
-                register_values['111'][0] = '1'#flag
-                register_values['111'][1] = '0'#flag
-                register_values['111'][2] = '0'
-                register_values['111'][3] = '0'#flag
+		register_values['111'] = '0000000000001000'
 
                 register_values[info[2][0]] = check[0]
   
@@ -374,10 +368,8 @@ while (halt == 0):
             check = A(info[1], info[2][1], info[2][2])
             if check[1] == '1':
                 register_values[info[2][0]] = check[0]
-                register_values['111'][0] = '1'#flag
-                register_values['111'][1] = '0'#flag
-                register_values['111'][2] = '0'
-                register_values['111'][3] = '0'#flag
+		register_values['111'] = '0000000000001000'
+
             else :
                 register_values[info[2][0]] = check[0]
 
@@ -388,10 +380,8 @@ while (halt == 0):
             if check[1] == "0":
                 register_values[info[2][0]] = check[0]
             else :
-                register_values['111'][0] = '1'#flag
-                register_values['111'][1] = '0'#flag
-                register_values['111'][2] = '0'
-                register_values['111'][3] = '0'#flag
+		register_values['111'] = '0000000000001000'
+         
                 register_values[info[2][0]] = check[0]
 
 
@@ -418,10 +408,13 @@ while (halt == 0):
         if info[2] == "cmp ":
             check = C(info[1], info[2][0], info[2][1])
             if check == '1':
-                register_values['111'][0] = '0'#flag
-                register_values['111'][1] = '0'#flag
-                register_values['111'][2] = '1'
-                register_values['111'][3] = '0'#flag
+		register_values['111'] = '0000000000000010'
+	    elif check == '0':
+		register_values['111'] = '0000000000000100'
+	    if check == '2':
+		register_values['111'] = '0000000000000001'
+		
+ 
                 
         else :
             C(info[1], info[2][0], info[2][1])
