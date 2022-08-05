@@ -165,9 +165,9 @@ def binaryToDecimal(n):
 def decimal_to_binary_16bit(decimal):
     binary = str(bin(decimal))[2:]
     if len(binary) > 16:
-        return binary[-16:]
+        return int(binary[-16:])
     else:
-        return '0'*(16-len(binary)) + binary
+        return int('0'*(16-len(binary)) + binary)
 
 
 #make different functions to execute different functions 
