@@ -1,5 +1,4 @@
 import sys
-from math import *
 def read_file():
     # x=input()
     # print(x)
@@ -187,37 +186,17 @@ def invert_func(x): #x is str # changed
         else:
             result+="0"
     return result
-'''
+
 def floating_value(x):
     #x is 16 bit 
     mantissa = x[-5:]
     exponent = x[-8:-5]
-    exponent = binaryToDecimal(exponent)
+    exponent = binaryToDecimal(exponent) - 3
     sum = 0
     for i in range(0,5):
         sum += int(mantissa[i])*(2**(-(i+1)))
     value = (2**(exponent))*sum
     return value
-
-def decimal_to_float(value):
-    e = floor(log2(value))
-    mantissa = (value/2**e) - 1
-    before = []
-    for i in range(5):
-        value = mantissa*2
-        value = int(value//1)
-        before += str(value)
-        mantissa = (mantissa*2) - ((mantissa*2)//1)
-    e = str(bin(e))
-    if e[0] == '-':
-        e = e[3:]
-    else:
-        e = e[2:]
-    before = "".join(before)
-    final = e + before
-    final= "0"*(8-len(final)) + final
-    return "0"*8 + final
-'''
 
 #make different functions to execute different functions 
 #A
@@ -258,26 +237,15 @@ def A(action, register_2, register_3):
     if action == "and" :
         x = register_values[register_2]&register_values[register_3]
         return x
-    '''
     if action == "addf":
         x1 = floating_value(register_values[register_2])
         x2 = floating_value(register_values[register_3])
         x = x1 + x2
         if x > pow(2,16)-1:
-            y = decimal_to_float(x)
+            y = decimal_to_binary_16bit(x)
             return [y,'1']
-        x = decimal_to_float(x)
+        x = decimal_to_binary_16bit(x)
         return [x,'0']
-    if action == "subf":
-        x1 = floating_value(register_values[register_2])
-        x2 = floating_value(register_values[register_3])
-        x = x1 - x2
-        if x < 0:
-            y = decimal_to_float(x)
-            return [y,'1']
-        x = decimal_to_float(x)
-        return [x,'0']
-        '''
         
         
         
@@ -288,10 +256,6 @@ def A(action, register_2, register_3):
 def B(action, register, imm):
     if action == "mov":
         register_values[register] = int(eightto16(imm))
-        '''
-    if action == "movf":
-        register_values[register] = int(imm)
-        '''
     if action == "rs":
         t = binaryToDecimal(imm)
         if t >= 16 :
@@ -444,22 +408,10 @@ while (halt == 0):
             check = A(info[1], info[2][0], info[2][1])
             if check[1] == "0":
                 register_values[info[2][2]] = check[0]
-                register_values['111'] = '0000000000000000'
             else :
                 register_values['111'] = '0000000000001000'
 
                 register_values[info[2][2]] = check[0]
-                '''
-        if info[1] == 'addf':
-            check = A(info[1], info[2][0], info[2][1])
-            if check[1] == "0":
-                register_values[info[2][2]] = check[0]
-                register_values['111'] = '0000000000000000'
-            else :
-                register_values['111'] = '0000000000001000'
-
-                register_values[info[2][2]] = check[0]
-                '''
   
 
 
@@ -470,19 +422,7 @@ while (halt == 0):
                 register_values['111'] = '0000000000001000'
 
             else :
-                register_values['111'] = '0000000000000000'
                 register_values[info[2][2]] = check[0]
-                '''
-        if info[1] == "subf":
-            check = A(info[1], info[2][0], info[2][1])
-            if check[1] == '1':
-                register_values[info[2][2]] = check[0]
-                register_values['111'] = '0000000000001000'
-
-            else :
-                register_values['111'] = '0000000000000000'
-                register_values[info[2][2]] = check[0]
-                '''
 
 
 
@@ -490,7 +430,6 @@ while (halt == 0):
             check = A(info[1], info[2][0], info[2][1])
             if check[1] == "0":
                 register_values[info[2][2]] = check[0]
-                register_values['111'] = '0000000000000000'
             else :
                 register_values['111'] = '0000000000001000'
          
@@ -565,7 +504,7 @@ while (halt == 0):
     PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
 
 for i in total_lines:
-    if i == total_lines[len(total_lines)-1]:
+    if i==total_lines[len(total_lines)-1]:
         print(i)
     else:
         print(i[:-1])
