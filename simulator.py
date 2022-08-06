@@ -187,7 +187,7 @@ def invert_func(x): #x is str # changed
         else:
             result+="0"
     return result
-
+'''
 def floating_value(x):
     #x is 16 bit 
     mantissa = x[-5:]
@@ -217,7 +217,7 @@ def decimal_to_float(value):
     final = e + before
     final= "0"*(8-len(final)) + final
     return "0"*8 + final
-
+'''
 
 #make different functions to execute different functions 
 #A
@@ -258,6 +258,7 @@ def A(action, register_2, register_3):
     if action == "and" :
         x = register_values[register_2]&register_values[register_3]
         return x
+    '''
     if action == "addf":
         x1 = floating_value(register_values[register_2])
         x2 = floating_value(register_values[register_3])
@@ -276,6 +277,7 @@ def A(action, register_2, register_3):
             return [y,'1']
         x = decimal_to_float(x)
         return [x,'0']
+        '''
         
         
         
@@ -286,8 +288,10 @@ def A(action, register_2, register_3):
 def B(action, register, imm):
     if action == "mov":
         register_values[register] = int(eightto16(imm))
+        '''
     if action == "movf":
         register_values[register] = int(imm)
+        '''
     if action == "rs":
         t = binaryToDecimal(imm)
         if t >= 16 :
@@ -445,6 +449,7 @@ while (halt == 0):
                 register_values['111'] = '0000000000001000'
 
                 register_values[info[2][2]] = check[0]
+                '''
         if info[1] == 'addf':
             check = A(info[1], info[2][0], info[2][1])
             if check[1] == "0":
@@ -454,6 +459,7 @@ while (halt == 0):
                 register_values['111'] = '0000000000001000'
 
                 register_values[info[2][2]] = check[0]
+                '''
   
 
 
@@ -466,6 +472,7 @@ while (halt == 0):
             else :
                 register_values['111'] = '0000000000000000'
                 register_values[info[2][2]] = check[0]
+                '''
         if info[1] == "subf":
             check = A(info[1], info[2][0], info[2][1])
             if check[1] == '1':
@@ -475,6 +482,7 @@ while (halt == 0):
             else :
                 register_values['111'] = '0000000000000000'
                 register_values[info[2][2]] = check[0]
+                '''
 
 
 
