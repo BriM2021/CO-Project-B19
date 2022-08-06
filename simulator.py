@@ -1,5 +1,5 @@
 import sys
-import math
+from math import *
 def read_file():
     # x=input()
     # print(x)
@@ -200,15 +200,29 @@ def floating_value(x):
     return value
 
 def decimal_to_float(x):
+    e = floor(log2(value))
+    mantissa = (value/2**e) - 1
+    before = []
+    for i in range(5):
+        value = mantissa*2
+        value = int(value//1)
+        before += str(value)
+        mantissa = (mantissa*2) - ((mantissa*2)//1)
+    e = str(bin(e))[2:]
+    before = "".join(before)
+    final = "0"*8 + e + before
+    return final
+    '''    
     before = ''
     x = str(x)
     x = x.split('.')
-    before = str(bin(x))[2:]
+    if len(x) == 2 or x[0] != '0':
+        before = str(bin(x))[2:]
     after = ''
-    for i in x[1]:
+    for i in range(0,  :
         after += int
  
-    for i in x:
+    for i in x:'''
 
 #make different functions to execute different functions 
 #A
