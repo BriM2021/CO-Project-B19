@@ -1,17 +1,17 @@
 import sys
 def read_file():
-	# x=input()
-	# print(x)
-	# return x.split("\n")
-	# f=open("A.txt", "r")
-	# list_file_line= f.readlines()
-	# return list_file_line
-	l=[]
-	for line in sys.stdin:
-		# print(line+"\n")
-		if(line!="\n"):
-			l.append(line)
-	return l
+    # x=input()
+    # print(x)
+    # return x.split("\n")
+    # f=open("A.txt", "r")
+    # list_file_line= f.readlines()
+    # return list_file_line
+    l=[]
+    for line in sys.stdin:
+        # print(line+"\n")
+        if(line!="\n"):
+            l.append(line)
+    return l
 
 opcode = {
 '10000' : ['add', 'A'],
@@ -172,9 +172,9 @@ def decimal_to_binary_16bit(decimal):
         return int('0'*(16-len(binary)) + binary)
 
 def eightto16(a):
-	return (16-len(a))*'0' + a
-	
-	
+    return (16-len(a))*'0' + a
+    
+    
 def invert_func(x): #x is str # changed 
     result=""
     for i in x:
@@ -259,7 +259,7 @@ def C(action, register_1, register_2 ):
             
         else :
             register_values[register_1] = register_values[register_2]
-	
+    
     if action == "div":
         r_2 = binaryToDecimal(register_values[register_2])
         r_1 = binaryToDecimal(register_values[register_1])
@@ -276,7 +276,7 @@ def C(action, register_1, register_2 ):
         if r_1 < r_2 :
             return '0' #lesser than flag is set
         if r_1 == r_2:
-	        return '2'
+            return '2'
     
 #type_D=["ld", "st"]
 def D(action, register_1, memory_ad):
@@ -298,7 +298,7 @@ def E(action, memory_ad):
             PC_MEMORY_ADDRESS = memory_ad
         else :
             PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
-		
+        
     if action == "jgt":
         if register_values['111'][14] == '1': #flag
             PC_MEMORY_ADDRESS = memory_ad
@@ -313,8 +313,8 @@ def E(action, memory_ad):
 def F():
     global halt 
     halt = 1
-	
-	
+    
+    
 def PCupdate(x):
     new = bin(int(x, 2) + int('00000001', 2))
     new_1=new[2:]
@@ -350,8 +350,8 @@ def PCdump():
     for i in x:
         print("0"*(16-len(str(i)))+str(i), end = ' ')
     print("")
-		
-	
+        
+    
 
 
 while (halt == 0):
@@ -422,7 +422,7 @@ while (halt == 0):
                 register_values['111'] = '0000000000000100'
             elif check == '2':
                 register_values['111'] = '0000000000000001'
-		
+        
  
                 
         else :
@@ -448,9 +448,15 @@ while (halt == 0):
         halt = 1
         cycle += 1
         count += [[cycle,PC_MEMORY_ADDRESS]]
-        PCdump()	
+        PCdump()    
         PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
         # print(PC_MEMORY_ADDRESS)
         break
-    PCdump()	
+    PCdump()    
     PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
+
+for i in total_lines:
+    print(i[:-1])
+
+for i in range(256-len(total_lines)):
+    print("0"*16)
