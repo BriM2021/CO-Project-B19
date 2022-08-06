@@ -200,6 +200,7 @@ def floating_value(x):
     return value
 
 def decimal_to_float(x):
+    def decimal_to_float(value):
     e = floor(log2(value))
     mantissa = (value/2**e) - 1
     before = []
@@ -208,21 +209,16 @@ def decimal_to_float(x):
         value = int(value//1)
         before += str(value)
         mantissa = (mantissa*2) - ((mantissa*2)//1)
-    e = str(bin(e))[2:]
+    e = str(bin(e))
+    if e[0] == '-':
+        e = e[3:]
+    else:
+        e = e[2:]
     before = "".join(before)
-    final = "0"*8 + e + before
-    return final
-    '''    
-    before = ''
-    x = str(x)
-    x = x.split('.')
-    if len(x) == 2 or x[0] != '0':
-        before = str(bin(x))[2:]
-    after = ''
-    for i in range(0,  :
-        after += int
- 
-    for i in x:'''
+    final = e + before
+    final= "0"*(8-len(final)) + final
+    return "0"*8 + final
+
 
 #make different functions to execute different functions 
 #A
@@ -268,18 +264,18 @@ def A(action, register_2, register_3):
         x2 = floating_value(register_values[register_3])
         x = x1 + x2
         if x > pow(2,16)-1:
-            y = decimal_to_binary_16bit(x)
+            y = decimal_to_float(x)
             return [y,'1']
-        x = decimal_to_binary_16bit(x)
+        x = decimal_to_float(x)
         return [x,'0']
     if action == "subf":
         x1 = floating_value(register_values[register_2])
         x2 = floating_value(register_values[register_3])
         x = x1 - x2
         if x < 0:
-            y = decimal_to_binary_16bit(x)
+            y = decimal_to_float(x)
             return [y,'1']
-        x = decimal_to_binary_16bit(x)
+        x = decimal_to_float(x)
         return [x,'0']
         
         
@@ -292,7 +288,7 @@ def B(action, register, imm):
     if action == "mov":
         register_values[register] = int(eightto16(imm))
     if action == "movf":
-        register_values[register] = decimal_to_binary_16bit(floating_value(imm))
+        register_values[register] = int(imm)
     if action == "rs":
         t = binaryToDecimal(imm)
         if t >= 16 :
