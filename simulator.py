@@ -515,7 +515,7 @@ for j in final_dump:
     
 for i in total_lines:
     if i==total_lines[len(total_lines)-1]:
-        print(i)
+        break
     else:
         print(i[:-1])
 
