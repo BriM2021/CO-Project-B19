@@ -323,25 +323,25 @@ def E(action, memory_ad):
     if action =="jlt":
         if register_values['111'][13] == '1':  #flag == '1':
             PC_MEMORY_ADDRESS = memory_ad
-            register_values['111'] == '0000000000000000'
+            register_values['111'] = '0000000000000000'
             
         else :
-            register_values['111'] == '0000000000000000'
+            register_values['111'] = '0000000000000000'
             PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
         
     if action == "jgt":
         if register_values['111'][14] == '1': #flag
-            register_values['111'] == '0000000000000000'
+            register_values['111'] = '0000000000000000'
             PC_MEMORY_ADDRESS = memory_ad
         else:
-            register_values['111'] == '0000000000000000'
+            register_values['111'] = '0000000000000000'
             PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
     if action == "je":
         if register_values['111'][15] == '1': #flag
-            register_values['111'] == '0000000000000000'
+            register_values['111'] = '0000000000000000'
             PC_MEMORY_ADDRESS = memory_ad
         else :
-            register_values['111'] == '0000000000000000'
+            register_values['111'] = '0000000000000000'
             PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
 
 def F():
