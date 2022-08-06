@@ -565,7 +565,10 @@ while (halt == 0):
     PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
 
 for i in total_lines:
-    print(i[:-1])
+    if i == total_lines[len(total_lines)-1]:
+        print(i)
+    else:
+        print(i[:-1])
 
 print_var = load_store.values()
 count = 0 
