@@ -499,8 +499,9 @@ while (halt == 0):
 
 final_dump = total_lines
 count = 0 
+print_var = load_store.values()
 for i in print_var:
-    final_dump += ["0"*(16-len(str(i)))+str(i))]
+    final_dump += ["0"*(16-len(str(i)))+str(i)]
     count +=1
 for i in range(256-len(total_lines)-count):
     final_dump += ["0"*16]
