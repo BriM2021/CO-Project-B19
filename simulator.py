@@ -246,6 +246,15 @@ def A(action, register_2, register_3):
             return [y,'1']
         x = decimal_to_binary_16bit(x)
         return [x,'0']
+    if action == "subf":
+        x1 = floating_value(register_values[register_2])
+        x2 = floating_value(register_values[register_3])
+        x = x1 - x2
+        if x < 0:
+            y = decimal_to_binary_16bit(x)
+            return [y,'1']
+        x = decimal_to_binary_16bit(x)
+        return [x,'0']
         
         
         
@@ -256,6 +265,8 @@ def A(action, register_2, register_3):
 def B(action, register, imm):
     if action == "mov":
         register_values[register] = int(eightto16(imm))
+    if action == "movf":
+        register_values[register] = decimal_to_binary_16bit(floating_value(imm))
     if action == "rs":
         t = binaryToDecimal(imm)
         if t >= 16 :
@@ -412,10 +423,26 @@ while (halt == 0):
                 register_values['111'] = '0000000000001000'
 
                 register_values[info[2][2]] = check[0]
+        if info[1] == 'addf':
+            check = A(info[1], info[2][0], info[2][1])
+            if check[1] == "0":
+                register_values[info[2][2]] = check[0]
+            else :
+                register_values['111'] = '0000000000001000'
+
+                register_values[info[2][2]] = check[0]
   
 
 
         if info[1] == "sub":
+            check = A(info[1], info[2][0], info[2][1])
+            if check[1] == '1':
+                register_values[info[2][2]] = check[0]
+                register_values['111'] = '0000000000001000'
+
+            else :
+                register_values[info[2][2]] = check[0]
+        if info[1] == "subf":
             check = A(info[1], info[2][0], info[2][1])
             if check[1] == '1':
                 register_values[info[2][2]] = check[0]
