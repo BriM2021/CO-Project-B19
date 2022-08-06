@@ -21,7 +21,7 @@ err_codes = {
     2: "Use of undefined variable",
     3: "Use of undefined label",
     4: "Illegal use of FLAGS register",
-    5: "Illegal immediate values (more than eight bits)",
+    5: "Illegal immediate values ",
     6: "Misuse of labels as variables or vice-versa", 
     7: "Variables not declared at the beginning",
     8: "Missing hlt instruction",
@@ -164,8 +164,9 @@ def immediate_value(value, type):
             val = float(value[1:])
         except:
             return 11
-        # if val >= and val <= :
-        #     return 5
+        if val >=252 or val <=0 :
+            return 5
+        print("value: ", val)
         bin_val = decimal_to_floating_point(val)
         return bin_val
     else:
