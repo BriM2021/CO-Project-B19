@@ -301,10 +301,10 @@ def C(action, register_1, register_2 ):
 def D(action, register_1, memory_ad):
     global PC_MEMORY_ADDRESS
     if action =="ld":
-        if len(load_store.value()) == 0:
+        if memory_ad not in load_store.keys():
             register_values[register_1] = 0000000000000000
-            
-        register_values[register_1] = load_store[memory_ad]
+        else:
+            register_values[register_1] = load_store[memory_ad]
 
     if action == "st":
         load_store[memory_ad] = register_values[register_1]
