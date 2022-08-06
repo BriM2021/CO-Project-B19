@@ -199,8 +199,7 @@ def floating_value(x):
     value = (2**(exponent))*sum
     return value
 
-def decimal_to_float(x):
-    def decimal_to_float(value):
+def decimal_to_float(value):
     e = floor(log2(value))
     mantissa = (value/2**e) - 1
     before = []
