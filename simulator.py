@@ -282,10 +282,10 @@ def B(action, register, imm):
 def C(action, register_1, register_2 ):
     if action == "mov" :
         if register_2 == '111':
-            register_values[register_1] = int(register_values[register_2])
+            register_values[register_2] = int(register_values[register_1])
             
         else :
-            register_values[register_1] = register_values[register_2]
+            register_values[register_2] = register_values[register_1]
     
     if action == "div":
         r_2 = binaryToDecimal(register_values[register_2])
