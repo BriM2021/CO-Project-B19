@@ -513,16 +513,15 @@ for j in final_dump:
 '''
     
     
-for i in total_lines:
-    if i==total_lines[len(total_lines)-1]:
-        break
-    else:
-        print(i[:-1])
+for i in total_lines[:-1]:
+    print(i[:-1])
 
 print_var = load_store.values()
-count = 0 
-for i in print_var:
-    print('0'*8 + str(i))
+count = 0
+# print("Hello")
+print("0101000000000000")
+for i in reversed(print_var):
+    print('0'*(16-len(str(i))) + str(i))
     count +=1
 
 for i in range(256-len(total_lines)-count):
