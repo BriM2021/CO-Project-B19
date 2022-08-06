@@ -498,6 +498,9 @@ while (halt == 0):
     PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
 
 final_dump = total_lines
+for i in total_lines:
+    final_dump += [i[:-1]]
+
 count = 0 
 print_var = load_store.values()
 for i in print_var:
