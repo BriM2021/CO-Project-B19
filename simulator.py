@@ -514,10 +514,8 @@ for j in final_dump:
     
     
 for i in total_lines:
-    if i==total_lines[len(total_lines)-1] and len(load_store.values()) = 0:
+    if i==total_lines[len(total_lines)-1]:
         print(i)
-    if i==total_lines[len(total_lines)-1] and len(load_store.values()) != 0 :
-        print(i[:-1])
     else:
         print(i[:-1])
 
