@@ -495,7 +495,7 @@ for i in total_lines:
 print_var = load_store.values()
 count = 0 
 for i in print_var:
-    print("0"*(16-len(i))+i)
+    print("0"*(16-len(str(i)))+str(i))
     count +=1
 
 for i in range(256-len(total_lines)-count):
