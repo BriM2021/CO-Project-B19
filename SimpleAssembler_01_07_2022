@@ -1,8 +1,9 @@
 import sys
+from math import *
 
 #store types of instructions
-type_A=["add", "sub", "mul", "xor", "or", "and"]
-type_B=["mov", "ls", "rs"]
+type_A=["add", "sub", "mul", "xor", "or", "and", "addf", "subf"]
+type_B=["mov", "ls", "rs", "movf"]
 type_C=["mov", "div", "not" , "cmp" ]
 type_D=["ld", "st"]
 type_E=["jmp","jlt", "jgt","je" ]
@@ -31,7 +32,7 @@ err_codes = {
     13: "Redefinition of variable",
     14: "Using same label more than one time"
 }
-opcode = {"movB": "10010", "movC": "10011", "hlt": "01010", "mul": "10110", "st": "10101", "add" : "10000", "sub": "10001", "ld":"10100", "div": "10111", "rs": "11000", "ls": "11001", "xor": "11010", "or": "11011", "and": "11100", "not": "11101", "cmp": "11110", "jmp":"11111", "jlt": "01100", "jgt":"01101", "je": "01111"}
+opcode = {"movB": "10010", "movC": "10011", "hlt": "01010", "mul": "10110", "st": "10101", "add" : "10000", "sub": "10001", "ld":"10100", "div": "10111", "rs": "11000", "ls": "11001", "xor": "11010", "or": "11011", "and": "11100", "not": "11101", "cmp": "11110", "jmp":"11111", "jlt": "01100", "jgt":"01101", "je": "01111", "addf": "00000", "subf" :"00001","movf" :"00010"}
 var_address = {}
 num_instructions = 0
 n = 0
@@ -134,16 +135,45 @@ def is_reg(reg, op=None):
             return 1#
     return regstr
 
+def decimal_to_floating_point(value):
+    e = floor(log2(value))
+    mantissa = (value/2**e) - 1
+    before = []
+    for i in range(5):
+        value = mantissa*2
+        value = int(value//1)
+        before += str(value)
+        mantissa = (mantissa*2) - ((mantissa*2)//1)
+    e = str(bin(e))[2:]
+    if e[0] == '-':
+        e = e[3:]
+    else:
+        e = e[2:]
+    before = "".join(before)
+    final = e + before
+    final= "0"*(8-len(final)) + final
+    return final
+
 #check validity of immediate value
-def immediate_value(value):
+def immediate_value(value, type):
     if value[0] != "$":
         # print("value:", value[0])
         return 11#
-    elif not value[1:].isnumeric():
-        return 11#
-    elif int(value[1:]) >= 2**8 or int(value[1:]) < 0:
-        return 5#
-    return dec_to_binary(int(value[1:]), 8)
+    if type == "movf":
+        try:
+            val = float(value[1:])
+        except:
+            return 11
+        # if val >= and val <= :
+        #     return 5
+        bin_val = decimal_to_floating_point(val)
+        return bin_val
+    else:
+        if not value[1:].isnumeric():
+            return 11#
+        elif int(value[1:]) >= 2**8 or int(value[1:]) < 0:
+            return 5#
+        return dec_to_binary(int(value[1:]), 8)
 
 def memory_address(variable):
     if variable in var_address:
@@ -194,7 +224,7 @@ def generate_code(instruction_syntax, type):
             binary_instruction += reg
     elif type == "B":
         reg = is_reg(instruction_syntax[1:2], type)
-        im_val = immediate_value(instruction_syntax[2])
+        im_val = immediate_value(instruction_syntax[2], instruction_syntax[0])
         if l != 3:
             return (12, n)
         elif isinstance(reg, int):
