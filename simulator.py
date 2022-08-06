@@ -497,7 +497,19 @@ while (halt == 0):
     PCdump()    
     PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
 
-for i in total_lines:
+final_dump = total_lines
+count = 0 
+for i in print_var:
+    final_dump += ["0"*(16-len(str(i)))+str(i))]
+    count +=1
+for i in range(256-len(total_lines)-count):
+    final_dump += ["0"*16]
+for j in final_dump:
+    print(j)
+
+    
+    
+'''for i in total_lines:
     if i==total_lines[len(total_lines)-1]:
         print(i)
     else:
@@ -510,4 +522,4 @@ for i in print_var:
     count +=1
 
 for i in range(256-len(total_lines)-count):
-    print("0"*16)
+    print("0"*16)'''
