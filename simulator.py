@@ -283,6 +283,7 @@ def C(action, register_1, register_2 ):
     if action == "mov" :
         if register_2 == '111':
             register_values[register_2] = int(register_values[register_1])
+            register_values['111'] = '0000000000000000'
             
         else :
             register_values[register_2] = register_values[register_1]
