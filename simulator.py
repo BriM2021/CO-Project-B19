@@ -479,7 +479,7 @@ while (halt == 0):
         count += [[cycle,PC_MEMORY_ADDRESS]]
     
     if info[0] == 'E':
-        if info[1] = 'jmp':           
+        if info[1] == 'jmp':           
             PCdump()
             cycle += 1
             count += [[cycle,PC_MEMORY_ADDRESS]]
