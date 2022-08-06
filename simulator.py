@@ -34,7 +34,10 @@ opcode = {
 '01101': ['jgt', 'E'],
 '01101': ['jgt', 'E'],
 '01111': ['je', 'E'],
-'01010': ['hlt','F']
+'01010': ['hlt','F'],
+'00000' : ['addf','A'],
+'00001' :['subf','A'],
+'00010' : ['movf','B']
 }
 
 type_A=["add", "sub", "mul", "xor", "or", "and"]
@@ -184,6 +187,17 @@ def invert_func(x): #x is str # changed
             result+="0"
     return result
 
+def floating_value(x):
+    #x is 16 bit 
+    mantissa = x[-5:]
+    exponent = x[-8:-5]
+    exponent = binaryToDecimal(exponent) - 3
+    sum = 0
+    for i in range(0,5):
+        sum += int(mantissa[i])*(2**(-(i+1)))
+    value = (2**(exponent))*sum
+    return value
+
 #make different functions to execute different functions 
 #A
 
@@ -223,6 +237,19 @@ def A(action, register_2, register_3):
     if action == "and" :
         x = register_values[register_2]&register_values[register_3]
         return x
+    if action == "addf":
+        x1 = floating_value(register_values[register_2])
+        x2 = floating_value(register_values[register_3])
+        x = x1 + x2
+        if x > pow(2,16)-1:
+            y = decimal_to_binary_16bit(x)
+            return [y,'1']
+        x = decimal_to_binary_16bit(x)
+        return [x,'0']
+        
+        
+        
+
 
 #def B,C,D,E,F
 
