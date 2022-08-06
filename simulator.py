@@ -237,15 +237,6 @@ def A(action, register_2, register_3):
     if action == "and" :
         x = register_values[register_2]&register_values[register_3]
         return x
-    if action == "addf":
-        x1 = floating_value(register_values[register_2])
-        x2 = floating_value(register_values[register_3])
-        x = x1 + x2
-        if x > pow(2,16)-1:
-            y = decimal_to_binary_16bit(x)
-            return [y,'1']
-        x = decimal_to_binary_16bit(x)
-        return [x,'0']
         
         
         
@@ -310,6 +301,9 @@ def C(action, register_1, register_2 ):
 def D(action, register_1, memory_ad):
     global PC_MEMORY_ADDRESS
     if action =="ld":
+        if len(load_store.value()) == 0:
+            register_values[register_1] = 0000000000000000
+            
         register_values[register_1] = load_store[memory_ad]
 
     if action == "st":
