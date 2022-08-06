@@ -322,26 +322,33 @@ def E(action, memory_ad):
         PC_MEMORY_ADDRESS = memory_ad
     if action =="jlt":
         if register_values['111'][13] == '1':  #flag == '1':
-            PC_MEMORY_ADDRESS = memory_ad
             register_values['111'] = '0000000000000000'
+            PCdump()
+            PC_MEMORY_ADDRESS = memory_ad
+            
             
         else :
             register_values['111'] = '0000000000000000'
+            PCdump()
             PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
         
     if action == "jgt":
         if register_values['111'][14] == '1': #flag
             register_values['111'] = '0000000000000000'
+            PCdump()
             PC_MEMORY_ADDRESS = memory_ad
         else:
             register_values['111'] = '0000000000000000'
+            PCdump()
             PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
     if action == "je":
         if register_values['111'][15] == '1': #flag
             register_values['111'] = '0000000000000000'
+            PCdump()
             PC_MEMORY_ADDRESS = memory_ad
         else :
             register_values['111'] = '0000000000000000'
+            PCdump()
             PC_MEMORY_ADDRESS = PCupdate(PC_MEMORY_ADDRESS)
 
 def F():
@@ -472,10 +479,16 @@ while (halt == 0):
         count += [[cycle,PC_MEMORY_ADDRESS]]
     
     if info[0] == 'E':
-        PCdump()
-        cycle += 1
-        count += [[cycle,PC_MEMORY_ADDRESS]]
-        E(info[1], info[2][0])
+        if info[1] = 'jmp':           
+            PCdump()
+            cycle += 1
+            count += [[cycle,PC_MEMORY_ADDRESS]]
+            E(info[1], info[2][0])
+        else :
+            cycle += 1
+            count += [[cycle,PC_MEMORY_ADDRESS]]
+            E(info[1], info[2][0])
+            
         continue
     
     if info[0] =='F':
