@@ -405,35 +405,35 @@ while (halt == 0):
     info = extract_instruction(instruction)
     if info[0] == "A":
         if info[1] == 'add':
-            check = A(info[1], info[2][1], info[2][2])
+            check = A(info[1], info[2][0], info[2][1])
             if check[1] == "0":
-                register_values[info[2][0]] = check[0]
+                register_values[info[2][2]] = check[0]
             else :
                 register_values['111'] = '0000000000001000'
 
-                register_values[info[2][0]] = check[0]
+                register_values[info[2][2]] = check[0]
   
 
 
         if info[1] == "sub":
-            check = A(info[1], info[2][1], info[2][2])
+            check = A(info[1], info[2][0], info[2][1])
             if check[1] == '1':
-                register_values[info[2][0]] = check[0]
+                register_values[info[2][2]] = check[0]
                 register_values['111'] = '0000000000001000'
 
             else :
-                register_values[info[2][0]] = check[0]
+                register_values[info[2][2]] = check[0]
 
 
 
         if info[1] == 'mul':
-            check = A(info[1], info[2][1], info[2][2])
+            check = A(info[1], info[2][0], info[2][1])
             if check[1] == "0":
-                register_values[info[2][0]] = check[0]
+                register_values[info[2][2]] = check[0]
             else :
                 register_values['111'] = '0000000000001000'
          
-                register_values[info[2][0]] = check[0]
+                register_values[info[2][2]] = check[0]
 
 
 
